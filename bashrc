@@ -28,8 +28,8 @@ bind TAB:menu-complete
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	        . /etc/bashrc
-	fi
+            . /etc/bashrc
+    fi
 
 # enable bash completion in interactive shells
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
@@ -37,3 +37,4 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
