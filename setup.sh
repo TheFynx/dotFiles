@@ -6,6 +6,8 @@ HOMEDIR=`pwd`
 
 # Delete Existing Dotfiles
 
+rm -rf /usr/bin/lock
+rm -rf /usr/bin/aerosnap
 rm -rf $HOMEDIR/.vim
 rm -f $HOMEDIR/.vimrc
 rm -f $HOMEDIR/.bashrc
@@ -20,6 +22,8 @@ rm -r $HOMEDIR/.config/obmenu-generator/config.pl
 
 # Create Symlinks
 
+ln -s $DIR/bin/lock /usr/bin/lock
+ln -s $DIR//bin/aerosnap /usr/bin/aerosnap
 ln -s $DIR/vimrc $HOMEDIR/.vimrc
 ln -s $DIR/vim $HOMEDIR/.vim
 ln -s $DIR/bashrc $HOMEDIR/.bashrc
