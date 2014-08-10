@@ -1,41 +1,42 @@
-## Levi's Autostart File
+## Openbox autostart.sh
+## ====================
+## When you login to your CrunchBang Openbox session, this autostart script 
+## will be executed to set-up your environment and launch any applications
+## you want to run at startup.
 ##
-## 
+## Note*: some programs, such as 'nm-applet' are run via XDG autostart.
+## Run '/usr/lib/openbox/openbox-xdg-autostart --list' to list any
+## XDG autostarted programs.
 ##
-## Note that global autostart .desktop files will also be in 
-## /etc/xdg/openbox/autostart. These will include applications
-## such as the Network Manager and Parcellite
+## More information about this can be found at:
+## http://openbox.org/wiki/Help:Autostart
 ##
-
-## DPMS - Display Power Management Signaling
-## This is disabled by default to prevent auto-actions when
-## the system is idle, such as screen blanking (10 mins) or
-## suspending (1 hour).
+## If you do something cool with your autostart script and you think others
+## could benefit from your hack, please consider sharing it at:
+## http://crunchbang.org/forums/
+##
+## Have fun & happy CrunchBangin'! :)
 
 ## GNOME PolicyKit and Keyring
 eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg) &
 
-## Ensure that obmenu-generator (a pipe menu) is set to the user.
-## Does this for each session (i.e. ease of use for addtional
-## accounts where created.
+## Set root window colour
+hsetroot -solid "#2E3436" &
 
-sed -i "s,_homedir_,${HOME}," ~/.config/obmenu-generator/schema.pl
-sed -i "s,_homedir_,${HOME}," ~/.config/obmenu-generator/config.pl
+## Group start:
+## 1. nitrogen - restores wallpaper
+## 2. compositor - start
+## 3. sleep - give compositor time to start
+## 4. tint2 panel
+(\
+nitrogen --restore && \
+cb-compositor --start && \
+sleep 2s && \
+tint2 \
+) &
 
-xset -dpms; xset s off &
-
-## Basic compositing effects
-compton -CGb &
-
-## Background
-nitrogen --restore &
-
-## Panel
-(sleep 1s && tint2) &
-
-## Startup
-(sleep 1s && pnmixer) &
-(sleep 3s && conky) &
+## Volume control for systray
+(sleep 2s && pnmixer) &
 
 ## Volume keys daemon
 xfce4-volumed &
@@ -62,12 +63,14 @@ xscreensaver -no-splash &
 ## Adjust the values according to your preferances.
 xset r rate 250 25 &
 
-## Numlock on
-numlockx &
-
 ## Turn on/off system beep
 xset b off &
 
+## Run the conky
+conky -q &
+
+## Numlock on
+numlockx &
+
 # Autostart the Dropbox deamon
 (sleep 60s && ~/.dropbox-dist/dropboxd) &
-
