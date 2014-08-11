@@ -34,9 +34,9 @@
     default_color grey
     default_shade_color red
     default_outline_color green
-    alignment top_right
+    alignment middle_right
     gap_x 5
-    gap_y 5
+    gap_y 30
     no_buffers yes
     uppercase no
     cpu_avg_samples 2
@@ -44,8 +44,7 @@
  
 TEXT
 DATE ${hr 2}
-${alignc 35}${font Trebuchet MS:size=26}${time %H:%M}${font}
-${alignc}${time %a %d %b %Y}
+${alignc}${font Liberation Mono:size=22}${time %a %d %b %Y}
  
 ${font sans-serif:bold:size=8}SYSTEM ${hr 2}
 ${font sans-serif:normal:size=8}$sysname $kernel $alignr $machine
