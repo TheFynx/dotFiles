@@ -36,7 +36,7 @@
     default_outline_color green
     alignment middle_right
     gap_x 5
-    gap_y 30
+    gap_y 5
     no_buffers yes
     uppercase no
     cpu_avg_samples 2
@@ -44,7 +44,7 @@
  
 TEXT
 DATE ${hr 2}
-${alignc}${font Liberation Mono:size=22}${time %a %d %b %Y}
+${alignc}${font Liberation Mono:size=12}${time %a %d %b %Y}
  
 ${font sans-serif:bold:size=8}SYSTEM ${hr 2}
 ${font sans-serif:normal:size=8}$sysname $kernel $alignr $machine

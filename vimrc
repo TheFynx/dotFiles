@@ -69,7 +69,6 @@
     Bundle 'flazz/vim-colorschemes'
     Bundle 'vim-perl/vim-perl'
     Bundle 'Shougo/vimshell.vim'
-    Bundle 'kakkyz81/evervim'
 
     " Testing Bundles
     Bundle 'MarcWeber/vim-addon-mw-utils'
