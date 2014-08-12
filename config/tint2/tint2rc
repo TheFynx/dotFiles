@@ -116,7 +116,7 @@ time1_format = %H:%M
 time1_font = Liberation Mono 11
 clock_font_color = #B5B5B5 100
 clock_padding = 12 4
-clock_background_id = 0
+clock_background_id = 1
 clock_lclick_command = gsimplecal
 clock_rclick_command = gsimplecal
 
@@ -126,7 +126,7 @@ tooltip_padding = 2 2
 tooltip_show_timeout = 0.0
 tooltip_hide_timeout = 0.0
 tooltip_background_id = 1
-tooltip_font = Liberation Mono 9.0
+tooltip_font = Liberation Mono 9
 tooltip_font_color = #D8D8D8 100
 
 # Mouse

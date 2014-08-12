@@ -117,9 +117,11 @@
 
        use obconf if you want to change these without having to log out
        and back in -->
-    <number>5</number>
+    <number>6</number>
     <firstdesk>1</firstdesk>
     <names>
+      <name/>
+      <name/>
       <name/>
       <name/>
       <name/>
@@ -456,15 +458,6 @@
           <name>Pidgin</name>
         </startupnotify>
         <command>pidgin</command>
-      </action>
-    </keybind>
-    <keybind key="C-W-g">
-      <action name="Execute">
-        <startupnotify>
-          <enabled>true</enabled>
-          <name>GitEye</name>
-        </startupnotify>
-        <command>giteye</command>
       </action>
     </keybind>
     <keybind key="C-W-r">

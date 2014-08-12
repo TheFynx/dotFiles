@@ -57,6 +57,8 @@ ${font sans-serif:normal:size=8}${cpugraph cpu0 33ffff 0000ff}
  
 CPU1: ${cpu cpu1}% ${cpubar cpu1}
 CPU2: ${cpu cpu2}% ${cpubar cpu2}
+CPU3: ${cpu cpu3}% ${cpubar cpu3}
+CPU4: ${cpu cpu4}% ${cpubar cpu4}
  
 ${font sans-serif:bold:size=8}MEMORY ${hr 2}
 ${font sans-serif:normal:size=8}RAM $alignc $mem / $memmax $alignr $memperc%
