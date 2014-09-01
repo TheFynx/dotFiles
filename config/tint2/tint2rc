@@ -132,8 +132,8 @@ tooltip_font_color = #D8D8D8 100
 # Mouse
 mouse_middle = none
 mouse_right = toggle
-mouse_scroll_up = toggle
-mouse_scroll_down = iconify
+mouse_scroll_up = none
+mouse_scroll_down = none
 
 # Battery
 battery = 1
