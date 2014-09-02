@@ -72,5 +72,8 @@ conky -q &
 ## Numlock on
 numlockx &
 
+# Autostart the rescuetime
+(sleep 60s && rescuetime) &
+
 # Autostart the Dropbox deamon
 (sleep 60s && ~/.dropbox-dist/dropboxd) &

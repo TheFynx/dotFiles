@@ -80,7 +80,6 @@ ${voffset 15}
 ${goto 90}${font Liberation Mono:size=7,weight:bold}${color}DISKS
 
 ${goto 90}${diskiograph 30,100 666666 666666}${voffset -30}
-${goto 90}${font Liberation Mono:size=7,weight:normal}${color}used: ${fs_used /home} /home
 ${goto 90}${font Liberation Mono:size=7,weight:normal}${color}used: ${fs_used /} /
 
 ${voffset 10}
