@@ -27,7 +27,7 @@ border_color = #000000 0
 rounded = 1
 border_width = 1
 background_color = #888888 20
-border_color = #ED2323 60
+border_color = #00CCCC 60
 
 # ID 5
 rounded = 0
@@ -82,7 +82,7 @@ urgent_nb_of_blink = 20
 task_icon = 1
 task_text = 0
 task_centered = 1
-task_maximum_size = 175 32
+task_maximum_size = 32 32
 task_padding = 6 3
 task_background_id = 3
 task_active_background_id = 2
