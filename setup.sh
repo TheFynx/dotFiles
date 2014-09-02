@@ -14,6 +14,7 @@ rm -f $HOMEDIR/.bashrc
 rm -f $HOMEDIR/.bash_profile
 rm -f $HOMEDIR/.profile
 rm -f $HOMEDIR/.conkyrc
+rm -f $HOMEDIR/.xscreensaver
 rm -rf $HOMEDIR/.config/conky
 rm -rf $HOMEDIR/.config/terminator
 rm -rf $HOMEDIR/.config/tint2
@@ -32,6 +33,7 @@ ln -s $DIR/bashrc $HOMEDIR/.bashrc
 ln -s $DIR/bash_profile $HOMEDIR/.bash_profile
 ln -s $DIR/profile $HOMEDIR/.profile
 ln -s $DIR/conkyrc $HOMEDIR/.conkyrc
+ln -s $DIR/xscreensaver $HOMEDIR/.xscreensaver
 ln -s $DIR/config/conky $HOMEDIR/.config/conky
 ln -s $DIR/config/terminator $HOMEDIR/.config/terminator
 ln -s $DIR/config/tint2 $HOMEDIR/.config/tint2
