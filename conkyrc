@@ -58,11 +58,11 @@ lua_draw_hook_post main
 
 
 TEXT
-${voffset 40}
-${goto 105}${color4}${font Liberation Mono:size=22}${time %e}${color1}${offset -80}${font Liberation Mono:size=10}${time %A}
+${voffset 47}
+${goto 120}${color4}${font Liberation Mono:size=22}${time %e}${color1}${offset -90}${font Liberation Mono:size=10}${time %A}
 ${goto 80}${color2}${voffset -1}${font Liberation Mono:size=9}${time %b}${voffset -2} ${color3}${font Liberation Mono:size=12}${time %Y}${font}
 
-${voffset 80}
+${voffset 83}
 ${goto 80}${font Liberation Mono:size=7,weight:bold}${color}CPU
 ${goto 80}${font Liberation Mono:size=7,weight:normal}${color1}${top name 1}${alignr}${top cpu 1}%
 ${goto 80}${font Liberation Mono:size=7,weight:normal}${color2}${top name 2}${alignr}${top cpu 2}%

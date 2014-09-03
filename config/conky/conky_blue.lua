@@ -15,7 +15,7 @@ require 'cairo'
 clock_h = {
     {
     name='time',                   arg='%H',                    max_value=12,
-    x=110,                         y=80,
+    x=110,                         y=90,
     graph_radius=73,
     graph_thickness=3,
     graph_unit_angle=30,           graph_unit_thickness=30,
@@ -34,7 +34,7 @@ clock_h = {
 clock_m = {
     {
     name='time',                   arg='%M',                    max_value=60,
-    x=110,                         y=80,
+    x=110,                         y=90,
     graph_radius=77,
     graph_thickness=2,
     graph_unit_angle=6,            graph_unit_thickness=6,
@@ -53,7 +53,7 @@ clock_m = {
 clock_s = {
     {
     name='time',                   arg='%S',                    max_value=60,
-    x=110,                         y=80,
+    x=110,                         y=90,
     graph_radius=70,
     graph_thickness=2,
     graph_unit_angle=6,            graph_unit_thickness=2,
@@ -74,7 +74,7 @@ clock_s = {
 gauge = {
 {
     name='cpu',                    arg='cpu0',                  max_value=100,
-    x=75,                          y=200,
+    x=75,                          y=210,
     graph_radius=30,
     graph_thickness=5,
     graph_start_angle=180,
@@ -95,7 +95,7 @@ gauge = {
 },
 {
     name='cpu',                    arg='cpu1',                  max_value=100,
-    x=75,                          y=200,
+    x=75,                          y=210,
     graph_radius=24,
     graph_thickness=5,
     graph_start_angle=180,
@@ -116,7 +116,7 @@ gauge = {
 },
 {
     name='cpu',                    arg='cpu2',                  max_value=100,
-    x=75,                          y=200,
+    x=75,                          y=210,
     graph_radius=18,
     graph_thickness=5,
     graph_start_angle=180,
@@ -137,7 +137,7 @@ gauge = {
 },
 {
     name='cpu',                    arg='cpu3',                  max_value=100,
-    x=75,                          y=200,
+    x=75,                          y=210,
     graph_radius=12,
     graph_thickness=5,
     graph_start_angle=180,
@@ -158,7 +158,7 @@ gauge = {
 },
 {
     name='memperc',                arg='',                      max_value=100,
-    x=75,                          y=300,
+    x=75,                          y=310,
     graph_radius=24,
     graph_thickness=5,
     graph_start_angle=180,
@@ -179,7 +179,7 @@ gauge = {
 },
 {
     name='fs_used_perc',           arg='/',                     max_value=100,
-    x=75,                          y=380,
+    x=75,                          y=390,
     graph_radius=24,
     graph_thickness=5,
     graph_start_angle=180,
