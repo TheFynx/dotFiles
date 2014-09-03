@@ -2,6 +2,13 @@
 
 [ -z "$PS1" ] && return
 
+## Functions
+function kgrep { ps -ef | grep $1 | grep -v grep | awk '{print $2}' | xargs kill -9; }
+
+
+##Exports
+export -f kgrep
+
 ## CMD Alias
 alias ..="cd .."
 alias ...="cd ../.."
@@ -23,6 +30,7 @@ alias l='ls -CF'
 alias lt='ls -lrt'
 alias pgrep='ps -ef|grep'
 alias cnt='ls -l ./|grep -v ^l|wc -l'
+alias fuck='sudo $(history -p \!\!)'
 
 bind TAB:menu-complete
 
@@ -38,3 +46,9 @@ fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+#generate random passwords
+genpasswd() {
+    local l=$1
+        [ "$l" == "" ] && l=16
+        tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+}
