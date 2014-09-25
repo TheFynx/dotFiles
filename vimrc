@@ -64,11 +64,11 @@
     Bundle 'airblade/vim-gitgutter'
     Bundle 'puppetlabs/puppet-syntax-vim'
     Bundle 'scrooloose/syntastic'
-    Bundle 'sjl/gundo.vim'
     Bundle 'plasticboy/vim-markdown'
     Bundle 'flazz/vim-colorschemes'
     Bundle 'vim-perl/vim-perl'
-    Bundle 'Shougo/vimshell.vim'
+    Bundle 'Rykka/riv.vim'
+    Bundle 'myusuf3/numbers.vim'
 
     " Testing Bundles
     Bundle 'MarcWeber/vim-addon-mw-utils'
@@ -76,6 +76,7 @@
     Bundle 'garbas/vim-snipmate'
     Bundle 'honza/vim-snippets'
     Bundle 'PProvost/vim-ps1'
+    Bundle 'Shougo/vimshell.vim'
 
     filetype plugin indent on
 
