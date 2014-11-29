@@ -68,6 +68,7 @@
     Bundle 'flazz/vim-colorschemes'
     Bundle 'vim-perl/vim-perl'
     Bundle 'Rykka/riv.vim'
+    Bundle 'Rykka/clickable.vim'
     Bundle 'myusuf3/numbers.vim'
 
     " Testing Bundles
