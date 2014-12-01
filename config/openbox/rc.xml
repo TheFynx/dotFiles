@@ -461,6 +461,15 @@
         <command>pidgin</command>
       </action>
     </keybind>
+    <keybind key="C-W-h">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Hipchat</name>
+        </startupnotify>
+        <command>hipchat</command>
+      </action>
+    </keybind>
     <keybind key="C-W-r">
       <action name="Execute">
         <startupnotify>

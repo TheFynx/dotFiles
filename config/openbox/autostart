@@ -73,8 +73,5 @@ numlockx &
 (sleep 60s && rescuetime) &
 
 # Autostart the Dropbox deamon
-(sleep 60s && ~/.dropbox-dist/dropboxd) &
-
-# Autostart the Dropbox deamon
 (sleep 10s && ~/.dropbox-dist/dropboxd) &
 
