@@ -38,9 +38,6 @@ tint2 \
 ## Volume control for systray
 (sleep 2s && pnmixer) &
 
-## Volume keys daemon
-xfce4-volumed &
-
 ## Enable power management
 xfce4-power-manager &
 
@@ -76,4 +73,5 @@ numlockx &
 (sleep 60s && rescuetime) &
 
 # Autostart the Dropbox deamon
-(sleep 60s && ~/.dropbox-dist/dropboxd) &
+(sleep 10s && ~/.dropbox-dist/dropboxd) &
+
