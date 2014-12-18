@@ -47,8 +47,8 @@
     Bundle 'gmarik/vundle'
 
     " Approved Bundles
+    Bundle 'vim-scripts/sudo.vim'
     Bundle 'godlygeek/tabular'
-    Bundle 'klen/python-mode'
     Bundle 'nelstrom/vim-visual-star-search'
     Bundle 'scrooloose/nerdtree'
     Bundle 'tpope/vim-repeat'
@@ -57,27 +57,25 @@
     Bundle 'tpope/vim-pathogen'
     Bundle 'tpope/vim-fugitive'
     Bundle 'tpope/vim-git'
+    Bundle 'tpope/vim-commentary'
+    Bundle 'tpope/vim-endwise'
     Bundle 'vim-scripts/AutoClose'
     Bundle 'pangloss/vim-javascript'
     Bundle 'bling/vim-airline'
     Bundle 'bling/vim-bufferline'
     Bundle 'airblade/vim-gitgutter'
     Bundle 'puppetlabs/puppet-syntax-vim'
+    Bundle 'rodjek/vim-puppet'
     Bundle 'scrooloose/syntastic'
     Bundle 'plasticboy/vim-markdown'
     Bundle 'flazz/vim-colorschemes'
     Bundle 'vim-perl/vim-perl'
-    Bundle 'Rykka/riv.vim'
-    Bundle 'Rykka/clickable.vim'
+    Bundle 'kchmck/vim-coffee-script'
+    Bundle 'mbbill/undotree'
     Bundle 'myusuf3/numbers.vim'
+    Bundle 'PProvost/vim-ps1'
 
     " Testing Bundles
-    Bundle 'MarcWeber/vim-addon-mw-utils'
-    Bundle 'tomtom/tlib_vim'
-    Bundle 'garbas/vim-snipmate'
-    Bundle 'honza/vim-snippets'
-    Bundle 'PProvost/vim-ps1'
-    Bundle 'Shougo/vimshell.vim'
 
     filetype plugin indent on
 
