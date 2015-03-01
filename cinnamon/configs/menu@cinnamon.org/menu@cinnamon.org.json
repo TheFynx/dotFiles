@@ -14,7 +14,7 @@
     },
     "menu-icon": {
         "type": "iconfilechooser",
-        "default": "/usr/share/cinnamon/theme/menu.svg",
+        "default": "/usr/share/cinnamon/theme/menu-symbolic.svg",
         "description": "Icon",
         "tooltip": "Select an icon to show in the panel.",
         "dependency": "menu-icon-custom",
@@ -73,5 +73,5 @@
         "callback": "_launch_editor",
         "tooltip": "Press this button to customize your menu entries."
     },
-    "__md5__": "26921345f7470f51b53972f933e61158"
+    "__md5__": "4a4171eb83415707a3bf1e180f68debb"
 }

@@ -10,7 +10,8 @@
             "google-chrome.desktop",
             "firefox.desktop",
             "gnome-terminal.desktop",
-            "nemo.desktop"
+            "nemo.desktop",
+            "cisco-anyconnect.desktop"
         ]
     },
     "allow-dragging": {

@@ -59,6 +59,7 @@
     Bundle 'tpope/vim-git'
     Bundle 'tpope/vim-commentary'
     Bundle 'tpope/vim-endwise'
+    Bundle 'tpope/vim-haml'
     Bundle 'vim-scripts/AutoClose'
     Bundle 'pangloss/vim-javascript'
     Bundle 'bling/vim-airline'
@@ -74,6 +75,10 @@
     Bundle 'mbbill/undotree'
     Bundle 'myusuf3/numbers.vim'
     Bundle 'PProvost/vim-ps1'
+    Bundle 'skammer/vim-css-color'
+    Bundle 'hail2u/vim-css3-syntax'
+    Bundle 'cakebaker/scss-syntax.vim'
+    Bundle 'JulesWang/css.vim'
 
     " Testing Bundles
 
@@ -339,9 +344,6 @@
 "" =================== }}}
 "  Post Configurations {{{1
 "" ===================
-  "evervim token"
-  let g:evervim_devtoken='S=s233:U=1b901db:E=14c0523799c:C=144ad724d9f:P=1cd:A=en-devtoken:V=2:H=463081daeb3d83240ccfc4e982fa8810'
-
   " Find ./*.vimrc"
     if filereadable("./custom.vimrc")
         echo "Loading ./custom.vimrc"

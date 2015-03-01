@@ -1,5 +1,11 @@
 # .bashrc
 
+export LD_LIBRARY_PATH=/usr/lib/oracle/12.1/client64/lib/:$LD_LIBRARY_PATH
+export ORACLE_HOME=/usr/lib/oracle/11.2/client
+export PATH=$PATH:$ORACLE_HOME/bin
+export PATH=$PATH:$HOME/.cabal/bin
+
+
 [ -z "$PS1" ] && return
 
 ## Functions
@@ -18,6 +24,7 @@ alias ..4="cd ../../../.."
 alias ..5="cd ../../../../.."
 alias ..6="cd ../../../../../.."
 alias ..7="cd ../../../../../../.."
+alias vcb="vim +BundleClean! +BundleInstall! +qall!"
 alias v="vim"
 alias vi="vim"
 alias ls='ls --color=auto'
@@ -45,6 +52,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:/opt/android-studio/bin/
 
 #generate random passwords
 genpasswd() {

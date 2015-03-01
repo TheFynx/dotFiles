@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <gconf>
-	<entry name="virtual_root" mtime="1418255536" type="string">
-		<stringvalue>file:///home/levi/Dropbox/system/home/vpn</stringvalue>
+	<entry name="virtual_root" mtime="1421355293" type="string">
+		<stringvalue>file:///home/levi/Downloads</stringvalue>
 	</entry>
-	<entry name="root" mtime="1418255536" type="string">
+	<entry name="root" mtime="1421355293" type="string">
 		<stringvalue>file:///</stringvalue>
 	</entry>
-	<entry name="tree_view" mtime="1418255536" type="bool" value="true"/>
+	<entry name="tree_view" mtime="1421355293" type="bool" value="true"/>
 </gconf>
