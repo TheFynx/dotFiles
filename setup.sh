@@ -12,7 +12,6 @@ rm -f $HOMEDIR/.bashrc
 rm -f $HOMEDIR/.bash_profile
 rm -f $HOMEDIR/.profile
 rm -f $HOMEDIR/.xscreensaver
-rm -rf $HOMEDIR/.cinnamon
 rm -rf $HOMEDIR/.gconf
 rm -rf $HOMEDIR/.config/dconf
 rm -rf $HOMEDIR/.config/linuxmint
@@ -26,7 +25,6 @@ ln -s $DIR/bashrc $HOMEDIR/.bashrc
 ln -s $DIR/bash_profile $HOMEDIR/.bash_profile
 ln -s $DIR/profile $HOMEDIR/.profile
 ln -s $DIR/xscreensaver $HOMEDIR/.xscreensaver
-ln -s $DIR/cinnamon $HOMEDIR/.cinnamon
 ln -s $DIR/gconf $HOMEDIR/.gconf
 ln -s $DIR/config/dconf $HOMEDIR/.config/dconf
 ln -s $DIR/config/linuxmint $HOMEDIR/.config/linuxmint
