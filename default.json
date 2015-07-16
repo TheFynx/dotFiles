@@ -2,4 +2,5 @@
   "run_list": [
     "recipe[dotfiles]"
   ]
+  "dotuser": "vagrant"
 }

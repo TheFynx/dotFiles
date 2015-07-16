@@ -1,5 +1,10 @@
 #!/bin/bash
-
+###
+#Usage
+# ./install.sh personal (for personal setup)
+# ./install.sh work (for work setup)
+# ./install.sh (for vagrant setup)
+###
 # Install Chef
 if [ ! -f /usr/bin/chef-solo ]; then
   curl -L https://www.opscode.com/chef/install.sh -o install_chef.sh
@@ -13,5 +18,12 @@ sudo rm -rf /var/chef/cookbooks/dotfiles
 sudo cp -R . /var/chef/cookbooks/dotfiles
 
 # Run Chef
-sudo /usr/bin/chef-solo -c solo.rb -j node.json
+if [ "${1}" == 'work' ]; then
+    sudo /usr/bin/chef-solo -c solo.rb -j work.json
+elif [ "${1}" == 'personal' ]; then
+    sudo /usr/bin/chef-solo -c solo.rb -j personal.json
+else
+    sudo /usr/bin/chef-solo -c solo.rb -j default.json
+fi
+
 vim +BundleClean! +BundleInstall! +qall!
