@@ -1,0 +1,23 @@
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	di = diff
+	dc = diff --cached
+	aa = add --all
+	amend = commit --amend -C HEAD
+  l = log --graph --pretty=format:'%Cgreen%h%Cblue%d %C(white)%s %Cblue%an %C(white)[%ar]'
+  la = log --all --graph --pretty=format:'%Cgreen%h%Cblue%d %C(white)%s %Cblue%an %C(white)[%ar]'
+[core]
+	editor = vim
+	excludesfile = /home/levi/.gitignore
+	autocrlf = input
+[color]
+	ui = true
+[user]
+	name = Levi Smith
+	email = levi@fynx.me
+[branch]
+	autosetuprebase = always
+[push]
+	default = upstream
