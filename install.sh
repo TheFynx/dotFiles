@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Install Chef
 if [ ! -f /usr/bin/chef-solo ]; then

@@ -44,18 +44,18 @@ directory "#{node[:dotfiles][:home_path]}/.config/terminator/plugins" do
 end
 
 cookbook_file "#{node[:dotfiles][:home_path]}/.config/terminator/config}" do
-  source 'terminator-config'
+  source 'terminator/config'
   owner node[:dotfiles][:user]
   group node[:dotfiles][:group]
 end
 
 %w(
-LayoutManager.py
-LayoutManager.pyc
-searchplugin.py
-searchplugin.pyc
-TerminalExporter.py
-TerminalExporter.pyc
+terminator/LayoutManager.py
+terminator/LayoutManager.pyc
+terminator/searchplugin.py
+terminator/searchplugin.pyc
+terminator/TerminalExporter.py
+terminator/TerminalExporter.pyc
 ).each do |filename|
   cookbook_file "#{node[:dotfiles][:home_path]}/.config/terminator/plugins/#{filename}" do
     source filename
