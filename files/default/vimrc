@@ -1,12 +1,22 @@
 "" ==============
 "  Initialization {{{1
 "" ==============
+
+    " Use Vim settings instead of Vi settings.
+    set nocompatible
+
+    " If you can't spell, tough.
     set nospell
-    set nocompatible        " must be first line
-    set background=dark     " Assume a dark background
+
+    " Assume a dark background
+    set background=dark
 
     " Clear Autocommands
     autocmd!
+
+    " Let Vim look for settings in a file
+    set modeline
+    set modelines=5
 
     " If vimrc has been modified, re-source it for fast modifications
     autocmd! BufWritePost *vimrc source %
@@ -30,13 +40,20 @@
             :BundleInstall
         endif
 
+    " Set Leader
+    let mapleader = ","
+
     " Wildmode options {{{2
     " ----------------
-        set wildmenu
-        set wildmode=longest:full,full
-        set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
-        set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
-        set wildignore+=*.pyc
+    set wildmenu
+    set wildmode=longest:full,full
+    set wildignore+=*.o,*.out,*.obj,*.rbc,*.rbo,*.class,*.gem
+    set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+    set wildignore+=*.jpg,*.png,*.gif,*.jpeg,*.bmp
+    set wildignore+=*.hg,*.git,*.svn
+    set wildignore+=*.exe,*.dll
+    set wildignore+=*.pyc
+    set wildignore+=*.DS_Store
     " }}}
 
 "" ==================== }}}
@@ -79,6 +96,7 @@
     Bundle 'hail2u/vim-css3-syntax'
     Bundle 'cakebaker/scss-syntax.vim'
     Bundle 'JulesWang/css.vim'
+    Bundle 'ekalinin/Dockerfile.vim'
 
     " Testing Bundles
 
@@ -88,16 +106,31 @@
 "  Filetype Association {{{1
 "" ====================
 
-    au BufRead,BufNewFile *vimrc
-      \ set foldmethod=marker
-    au BufRead,BufNewFile *.pp
-      \ set filetype=puppet
-    au BufRead,BufNewFile *_spec.rb
-      \ nmap <F8> :!rspec --color %<CR>
+    au BufRead,BufNewFile *vimrc set foldmethod=marker
+
+    augroup Puppet
+        autocmd! BufEnter *.pp set filetype=puppet tabstop=2 sts=2 shiftwidth=2
+    augroup end
+
+    augroup RubySyntaxFiles
+        autocmd! BufRead,BufEnter *.rb,*.rake set tabstop=2 sts=2 shiftwidth=2 filetype=ruby
+        autocmd! BufEnter Rakefile set filetype=ruby
+        autocmd! BufEnter Gemfile set filetype=ruby
+    augroup end
+
+    augroup MarkdownFiles " Instead of this Modulo file bullshit
+        autocmd! BufEnter *.md set filetype=markdown
+    augroup end
+
+    au BufWritePost ~/.bashrc !source %
+
+    au BufRead,BufNewFile *_spec.rb nmap <F8> :!rspec --color %<CR>
+
     augroup PatchDiffHighlight
         autocmd!
         autocmd BufEnter *.patch,*.rej,*.diff syntax enable
-    augroup END
+    augroup end
+
 
 "" ============= }}}
 "  Look and Feel {{{1
@@ -145,9 +178,11 @@
     " }}}
     " Tabbing and Spaces {{{2
     " ------------------
-
         " Use 4 spaces instead of tabs
-        set ts=4 sts=4 sw=4 expandtab
+        set ts=4
+        set sts=4
+        set shiftwidth=4
+        set expandtab
 
         " Auto indent
         set autoindent
@@ -155,24 +190,27 @@
         " replace trailing whitespace and tabs with unicode characters
         exec "set listchars=tab:\uBB\uBB,trail:\u2716,nbsp:~"
         set list
-
     " }}}
     " Color Settings {{{2
     " --------------
 
-        " Enable highlight search and highlight when searching
-        ""set hlsearch
-        ""set incsearch
-        ""set ignorecase
-        ""set smartcase
-        ""set gdefault
-
         " Enable syntax highlighting
-        set t_Co=256
         syntax enable
 
-        colorscheme badwolf
-
+        " Set font and color scheme for Gvim
+        set guifont=Inconsolata\ for\ Powerline:h14
+        if has("gui_running")
+            if has("gui_win32")
+                set guifont=Consolas:h10:cANSI
+            endif
+        else
+            set t_Co=256
+        endif
+        try
+            colorscheme badwolf
+        catch
+            colorscheme darkzen
+        endtry
 
         " }}}
     " Persistent Undo {{{2
@@ -210,7 +248,7 @@
     " }}}
     " Snippets Variables {{{2
     " ------------------
-        let g:snips_author = 'Britt Gresham'
+        let g:snips_author = 'Levi Smith'
     " }}}
     " NERDTree {{{2
     " --------
@@ -231,9 +269,11 @@
 "" ======== }}}
 "  Mappings {{{1
 "" ========
-    " Command Line Mode {{{2
-    " -----------------------------------------------------------
+    " Disable Q (Command Shell Mode) {{{2
+    " ------------------------------
         nnoremap Q <nop>
+        nnoremap gq <nop>
+        nnoremap q: <nop>
     " }}}
     " * No longer moves the cursor when hitting it the first time {{{2
     " -----------------------------------------------------------
@@ -254,7 +294,8 @@
     " }}}
     " Space folds and unfolds {{{2
     " -----------------------
-        nmap <Space> za
+        nnoremap <Space> za
+        vnoremap <Space> za
     " }}}
     " Zencoding {{{2
     " ---------
@@ -263,14 +304,20 @@
     " }}}
     " Misc {{{2
     " ----
-        imap jj <Esc>:syntax sync fromstart<CR>
-
+        imap jj <Esc>:redraw!<CR>:syntax sync fromstart<CR>
     " }}}
-    " Vimrc Reload {{{2
+    " Vimrc Toggle {{{2
     " ------------
-        let mapleader = ","
-        nmap <leader>v :vsp $MYVIMRC<CR>
+        function! ToggleVimrc()
+            if expand("%:p") =~ $MYVIMRC
+                :bd
+            else
+                :vsp $MYVIMRC
+            endif
+        endfunction
+        nmap <leader>v :call ToggleVimrc()<CR>
     " }}}
+
     " NERDTreeToggle {{{2
     " --------------
     function! NERDTreeToggleOrFocus()
@@ -332,23 +379,15 @@
     " Don't redraw when running macros
     set lazyredraw
 
-    " Set timeout on keycodes but not mappings
-    "set notimeout
-    "set ttimeout
-    "set ttimeoutlen=100
-
     " Syntax optimazations
     syntax sync minlines=256
-    " set syntaxcol=256
 
 "" =================== }}}
 "  Post Configurations {{{1
 "" ===================
-  " Find ./*.vimrc"
-    if filereadable("./custom.vimrc")
-        echo "Loading ./custom.vimrc"
-        source ./custom.vimrc
-    endif
+    " Find local Vim files"
+    silent! source ~/.vimrc.local
+    silent! source ./.vimrc.local
     " Remap mappings that get overwritten by plugins
     set rtp+=~/.vim/after/
 "" }}}
