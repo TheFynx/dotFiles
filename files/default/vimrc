@@ -1,5 +1,63 @@
+"" ==============
+"  Initialization {{{1
+"" ==============
 
-i"  Vundle Bundles {{{1
+    " Use Vim settings instead of Vi settings.
+    set nocompatible
+
+    " If you can't spell, tough.
+    set nospell
+
+    " Assume a dark background
+    set background=dark
+
+    " Clear Autocommands
+    autocmd!
+
+    " Let Vim look for settings in a file
+    set modeline
+    set modelines=5
+
+    " If vimrc has been modified, re-source it for fast modifications
+    autocmd! BufWritePost *vimrc source %
+
+    " Setting up Vundle - the vim plugin bundler
+        let iCanHazVundle=1
+        let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+        if !filereadable(vundle_readme)
+            echo "Installing Vundle.."
+            echo ""
+            silent !mkdir -p ~/.vim/bundle
+            silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+            let iCanHazVundle=0
+        endif
+        set rtp+=~/.vim/bundle/vundle/
+        call vundle#rc()
+
+        if iCanHazVundle == 0
+            echo "Installing Bundles, please ignore key map error messages"
+            echo ""
+            :BundleInstall
+        endif
+
+    " Set Leader
+    let mapleader = ","
+
+    " Wildmode options {{{2
+    " ----------------
+    set wildmenu
+    set wildmode=longest:full,full
+    set wildignore+=*.o,*.out,*.obj,*.rbc,*.rbo,*.class,*.gem
+    set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+    set wildignore+=*.jpg,*.png,*.gif,*.jpeg,*.bmp
+    set wildignore+=*.hg,*.git,*.svn
+    set wildignore+=*.exe,*.dll
+    set wildignore+=*.pyc
+    set wildignore+=*.DS_Store
+    " }}}
+
+"" ==================== }}}
+"  Vundle Bundles {{{1
 "" ==============
 
     " Required Plugins
@@ -30,10 +88,10 @@ i"  Vundle Bundles {{{1
     Bundle 'myusuf3/numbers.vim'
     Bundle 'PProvost/vim-ps1'
     Bundle 'ekalinin/Dockerfile.vim'
-    Bundle "MarcWeber/vim-addon-mw-utils"
-    Bundle "tomtom/tlib_vim"
-    Bundle "garbas/vim-snipmate"
-    Bundle "vadv/vim-chef"
+    Bundle 'MarcWeber/vim-addon-mw-utils'
+    Bundle 'tomtom/tlib_vim'
+    Bundle 'garbas/vim-snipmate'
+    Bundle 'vadv/vim-chef'
 
     " Testing Bundles
 
@@ -51,9 +109,12 @@ i"  Vundle Bundles {{{1
         autocmd! BufEnter Gemfile set filetype=ruby
     augroup end
 
+    augroup Chef
+        autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
+    augroup end
+
     augroup MarkdownFiles " Instead of this Modulo file bullshit
-      autocmd BufNewFile,BufReadPost *.md set filetype=markdown        
-      autocmd! BufEnter *.md set filetype=markdown
+        autocmd BufNewFile,BufReadPost *.md set filetype=markdown
     augroup end
 
     au BufWritePost ~/.bashrc !source %
@@ -306,13 +367,6 @@ i"  Vundle Bundles {{{1
             endif
         endfunction
         nmap <leader>p :call TogglePaste()<CR>
-    " }}}
-    " Toggle Chef  {{{2
-    " --------------------
-        function! ToggleChef()
-          autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
-        endfunction
-        nmap <leader>c :call ToggleChef()<CR>
     " }}}
 "" ========================= }}}
 "" ========================= }}}
