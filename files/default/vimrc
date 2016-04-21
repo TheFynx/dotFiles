@@ -1,72 +1,12 @@
-"" ==============
-"  Initialization {{{1
-"" ==============
 
-    " Use Vim settings instead of Vi settings.
-    set nocompatible
-
-    " If you can't spell, tough.
-    set nospell
-
-    " Assume a dark background
-    set background=dark
-
-    " Clear Autocommands
-    autocmd!
-
-    " Let Vim look for settings in a file
-    set modeline
-    set modelines=5
-
-    " If vimrc has been modified, re-source it for fast modifications
-    autocmd! BufWritePost *vimrc source %
-
-    " Setting up Vundle - the vim plugin bundler
-        let iCanHazVundle=1
-        let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-        if !filereadable(vundle_readme)
-            echo "Installing Vundle.."
-            echo ""
-            silent !mkdir -p ~/.vim/bundle
-            silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-            let iCanHazVundle=0
-        endif
-        set rtp+=~/.vim/bundle/vundle/
-        call vundle#rc()
-
-        if iCanHazVundle == 0
-            echo "Installing Bundles, please ignore key map error messages"
-            echo ""
-            :BundleInstall
-        endif
-
-    " Set Leader
-    let mapleader = ","
-
-    " Wildmode options {{{2
-    " ----------------
-    set wildmenu
-    set wildmode=longest:full,full
-    set wildignore+=*.o,*.out,*.obj,*.rbc,*.rbo,*.class,*.gem
-    set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
-    set wildignore+=*.jpg,*.png,*.gif,*.jpeg,*.bmp
-    set wildignore+=*.hg,*.git,*.svn
-    set wildignore+=*.exe,*.dll
-    set wildignore+=*.pyc
-    set wildignore+=*.DS_Store
-    " }}}
-
-"" ==================== }}}
-"  Vundle Bundles {{{1
+i"  Vundle Bundles {{{1
 "" ==============
 
     " Required Plugins
     Bundle 'gmarik/vundle'
 
     " Approved Bundles
-    Bundle 'vim-scripts/sudo.vim'
     Bundle 'godlygeek/tabular'
-    Bundle 'nelstrom/vim-visual-star-search'
     Bundle 'scrooloose/nerdtree'
     Bundle 'tpope/vim-repeat'
     Bundle 'tpope/vim-speeddating'
@@ -82,21 +22,18 @@
     Bundle 'bling/vim-airline'
     Bundle 'bling/vim-bufferline'
     Bundle 'airblade/vim-gitgutter'
-    Bundle 'puppetlabs/puppet-syntax-vim'
-    Bundle 'rodjek/vim-puppet'
     Bundle 'scrooloose/syntastic'
     Bundle 'plasticboy/vim-markdown'
     Bundle 'flazz/vim-colorschemes'
-    Bundle 'vim-perl/vim-perl'
     Bundle 'kchmck/vim-coffee-script'
     Bundle 'mbbill/undotree'
     Bundle 'myusuf3/numbers.vim'
     Bundle 'PProvost/vim-ps1'
-    Bundle 'skammer/vim-css-color'
-    Bundle 'hail2u/vim-css3-syntax'
-    Bundle 'cakebaker/scss-syntax.vim'
-    Bundle 'JulesWang/css.vim'
     Bundle 'ekalinin/Dockerfile.vim'
+    Bundle "MarcWeber/vim-addon-mw-utils"
+    Bundle "tomtom/tlib_vim"
+    Bundle "garbas/vim-snipmate"
+    Bundle "vadv/vim-chef"
 
     " Testing Bundles
 
@@ -108,10 +45,6 @@
 
     au BufRead,BufNewFile *vimrc set foldmethod=marker
 
-    augroup Puppet
-        autocmd! BufEnter *.pp set filetype=puppet tabstop=2 sts=2 shiftwidth=2
-    augroup end
-
     augroup RubySyntaxFiles
         autocmd! BufRead,BufEnter *.rb,*.rake set tabstop=2 sts=2 shiftwidth=2 filetype=ruby
         autocmd! BufEnter Rakefile set filetype=ruby
@@ -119,7 +52,8 @@
     augroup end
 
     augroup MarkdownFiles " Instead of this Modulo file bullshit
-        autocmd! BufEnter *.md set filetype=markdown
+      autocmd BufNewFile,BufReadPost *.md set filetype=markdown        
+      autocmd! BufEnter *.md set filetype=markdown
     augroup end
 
     au BufWritePost ~/.bashrc !source %
@@ -240,6 +174,10 @@
     " ----------------
         let g:airline#extensions#tabline#enabled = 1
         set laststatus=2
+    " }}}
+    " Markdown Settings {{{2
+    " ----------------
+       let g:vim_markdown_folding_disabled = 1
     " }}}
     " Vim Session Persist {{{2
     " -------------------
@@ -369,6 +307,14 @@
         endfunction
         nmap <leader>p :call TogglePaste()<CR>
     " }}}
+    " Toggle Chef  {{{2
+    " --------------------
+        function! ToggleChef()
+          autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
+        endfunction
+        nmap <leader>c :call ToggleChef()<CR>
+    " }}}
+"" ========================= }}}
 "" ========================= }}}
 "  Performance Optimizations {{{1
 "" =========================
