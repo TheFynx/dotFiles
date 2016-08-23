@@ -4,23 +4,54 @@
 
 set -o nounset -o pipefail
 
-bootstrapCookbook='bootstrap-osx'
-tempInstallDir="mktemp -d -t ${bootstapCookbook}"
+# All in on bootstrap of OS choice
+bootstrapCookbook="clientBootstrap"
+bootstrapGit="https://github.com/thefynx/${bootstrapCookbook}.git"
+
+# dotFile config
+dotFilesCookbook="dotfiles"
+dotfilesGit="https://github.com/thefynx/${dotFilesCookbook}.git"
+
+tempInstallDir="mktemp -d -t bootstrap"
+
+function prompt_continue () {
+  echo "!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "Bootstrap encountered an error in the previous step."
+  read -p "Ignore the error and contine with installation? [yN] " </dev/tty
+  case "$REPLY" in
+    [yY]*) return
+      ;;
+    *) echo "Not cleaning up $tempInstallDir; exiting."
+      exit 2
+      ;;
+  esac
+}
+
 
 # create Berksfile so that we can install the correct cookbook dependencies
 cat > "${tempInstallDir}/Berksfile" <<EOF
 source 'https://supermarket.chef.io'
-cookbook '$bootstrapCookbook';
-cookbook '$dotfiles';
+cookbook "${dotFilesCookbook}", git: '${dotfilesGit}'
 EOF
+
+read -p ">>> dotFile Install -- Do you wish to bootstrap the system at this time?; y/n (default n)" bootstrapAnswer
+
+# If bootstrapping, adding bootstrap to deps
+if [ ${bootstrapAnswer} == [yY]* ]; then
+    echo "cookbook "${bootstrapCookbook}", git: '${bootstrapGit}'" >> ${tempInstallDir}/Berksfile
+    echo ">>> Bootstrap added to dependencies and runlist"
+fi
 
 # create client.rb file so that Chef client can find its dependant cookbooks
 cat > "${tempInstallDir}/client.rb" <<EOF
 cookbook_path File.join(Dir.pwd, 'berks-cookbooks')
+local_mode true
+chef_zero.enabled
+json_attribs "${tempInstallDir}/attributes.json"
 EOF
 
 cat <<EOF
-** Installing ChefDK
+>>> Installing ChefDK
 EOF
 
 if [[ "$INSTALL_CHEFDK" -eq 1 ]]
@@ -30,28 +61,32 @@ then
     sudo -E bash -s -- -c stable -P chefdk || prompt_continue
 fi
 
-echo "Downloading cookbook dependencies with Berkshelf"
+echo ">>> Downloading cookbook dependencies with Berkshelf"
 cd "$tempInstallDir" || prompt_continue
 chef exec berks vendor || prompt_continue
 
-# Pass optional attributes to chef-client
-# This is a temporary interface and will change in 2.0 when we support named parameters (Issue #74)
-if [ -n "${BOOTSTRAP_JSON_ATTRIBUTES:-}" ]
-then
-  attributeParameter=" --json-attributes $CHEFDK_BOOTSTRAP_JSON_ATTRIBUTES"
-fi
 
-echo "Running chef-client (installed by ChefDK) to bootstrap this machine"
-sudo -E chef-client -z -l error -c "${tempInstallDir}/client.rb" -o "$bootstrapCookbook" ${attributeParameter:-} || prompt_continue
+cat > "${tempInstallDir}/attributes.json" << EOF
+{
+    "${dotFilesCookbook}": {
+        "something": ""
+    },
+    "run_list": [
+        "recipe[${bootstrapCookbook}]",
+        "recipe[${dotFilesCookbook}]"
+    ]
+}
+EOF
+
+echo ">>> Running chef-client (installed by ChefDK) to bootstrap this machine"
+sudo -E chef-client error -c "${tempInstallDir}/client.rb" || prompt_continue
 
 # cleanup
 cd - || prompt_continue
 sudo rm -rf "$tempInstallDir"
 
-# End message to direct Mac users to last step in set up
+# End message
 cat <<EOF
-You're almost done!!! You just need to edit your shell startup script to set up
-chefdk environment variables for each login. See this page:
-https://github.com/chef/chef-dk#using-chefdk-as-your-primary-development-environment
+>>> Bootstrap Complete!
 EOF
 

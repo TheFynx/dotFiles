@@ -1,14 +1,23 @@
 case platform
 when "mac_os_x"
-  default[:dotfiles] = {
-    user: "levi",
-    group: "staff",
-    home_path: "/Users/levi"
-  }
+  default["dotfiles"].tap do |profile|
+    profile["group"] = "levi",
+    profile["group"] = "staff",
+    profile["home"] "/Users/levi"
+  end
+
+when "windows"
+  default["dotfiles"].tap do |profile|
+    profile["group"] = "levi",
+    profile["group"] = "levi",
+    profile["home"] "/home/levi"
+  end
 else
-  default[:dotfiles] = {
-    user: "levi",
-    group: "levi",
-    home_path: "/home/levi"
-  }
+  default["dotfiles"].tap do |profile|
+    profile["group"] = "levi",
+    profile["group"] = "levi",
+    profile["home"] "/home/levi"
+  end
 end
+
+
