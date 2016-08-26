@@ -4,19 +4,15 @@
 
 set -o nounset -o pipefail
 
-# All in on bootstrap of OS choice
-bootstrapCookbook="clientBootstrap"
-bootstrapGit="https://github.com/thefynx/${bootstrapCookbook}.git"
-
 # dotFile config
 dotFilesCookbook="dotfiles"
 dotfilesGit="https://github.com/thefynx/${dotFilesCookbook}.git"
 
-tempInstallDir="mktemp -d -t bootstrap"
+tempInstallDir="mktemp -d -t dotfiles"
 
 function prompt_continue () {
   echo "!!!!!!!!!!!!!!!!!!!!!!!"
-  echo "Bootstrap encountered an error in the previous step."
+  echo "dotFiles encountered an error in the previous step."
   read -p "Ignore the error and contine with installation? [yN] " </dev/tty
   case "$REPLY" in
     [yY]*) return
@@ -69,16 +65,18 @@ chef exec berks vendor || prompt_continue
 cat > "${tempInstallDir}/attributes.json" << EOF
 {
     "${dotFilesCookbook}": {
-        "something": ""
+        "profile": {
+            "user": "levi",
+            "group": "levi"
+        }
     },
     "run_list": [
-        "recipe[${bootstrapCookbook}]",
         "recipe[${dotFilesCookbook}]"
     ]
 }
 EOF
 
-echo ">>> Running chef-client (installed by ChefDK) to bootstrap this machine"
+echo ">>> Running chef-client (installed by ChefDK) to bootstrap these dotFiles"
 sudo -E chef-client error -c "${tempInstallDir}/client.rb" || prompt_continue
 
 # cleanup
@@ -87,6 +85,6 @@ sudo rm -rf "$tempInstallDir"
 
 # End message
 cat <<EOF
->>> Bootstrap Complete!
+>>> dotFiles Installation Complete!
 EOF
 
