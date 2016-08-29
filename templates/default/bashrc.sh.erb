@@ -74,8 +74,8 @@ for file in /etc/bash_completion.d/* ; do
     source "$file"
 done
 
-if [[ -f $HOME/.bash_profile ]]; then
-    source $HOME/.bash_profile
+if [[ -f <%= node["dotfiles"]["profile"]["home"] %>/.bash_profile ]]; then
+    source <%= node["dotfiles"]["profile"]["home"] %>/.bash_profile
 fi
 
 # Load Bash It

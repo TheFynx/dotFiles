@@ -11,8 +11,8 @@
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-    . "$HOME/.bashrc"
+    if [ -f "<%= node["dotfiles"]["profile"]["home"] %>/.bashrc" ]; then
+    . "<%= node["dotfiles"]["profile"]["home"] %>/.bashrc"
     fi
 fi
 
@@ -24,9 +24,7 @@ if [ -d "/usr/sbin" ] ; then
     PATH="/usr/sbin:$PATH"
 fi
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/bin" ] ; then
+    PATH="<%= node["dotfiles"]["profile"]["home"] %>/bin:$PATH"
 fi
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-PATH="/usr/games:$PATH"

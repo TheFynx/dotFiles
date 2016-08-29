@@ -1,5 +1,27 @@
 # update path
-export PATH=/usr/local/bin:$PATH:/usr/share/bcc/tools:/sbin
+if [ -d "/usr/share/bcc/tools" ]; then
+    export PATH=/usr/share/bcc/tools:$PATH
+fi
+
+if [ -d "/usr/local/bin" ]; then
+    export PATH=/usr/local/bin
+fi
 
 # Add home local bin
-$PATH:~/.local/bin
+if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.local/bin" ]; then
+    export PATH=<%= node["dotfiles"]["profile"]["home"] %>/.local/bin
+fi
+
+# include sbin in PATH
+if [ -d "/sbin" ]; then
+    export PATH="/sbin:$PATH"
+fi
+
+if [ -d "/usr/sbin" ]; then
+    export PATH="/usr/sbin:$PATH"
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/bin" ]; then
+    export PATH="<%= node["dotfiles"]["profile"]["home"] %>/bin:$PATH"
+fi
