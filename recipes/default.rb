@@ -16,11 +16,17 @@
   end
 end
 
-template "name" do
-  source "source.erb"
-  owner "root"
-  group "root"
-  mode "0644"
+%w(
+  gitconfig
+  gitignore
+  vimrc
+).each do |filename|
+  template "#{node["dotfiles"]["profile"]["home_path"]}/.#{filename}" do
+    source "#{filename}.erb"
+    owner node["dotfiles"]["profile"]["user"]
+    group node["dotfiles"]["profile"]["group"]
+    mode 00775
+  end
 end
 
 cookbook_file "#{node[:dotfiles][:home_path]}/.config/terminator/config" do
