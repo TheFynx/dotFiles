@@ -85,34 +85,6 @@ bees(){
         --name bees \
         ${DOCKER_REPO_PREFIX}/beeswithmachineguns "$@"
 }
-cadvisor(){
-    docker run -d \
-        --restart always \
-        -v /:/rootfs:ro \
-        -v /var/run:/var/run:rw \
-        -v /sys:/sys:ro  \
-        -v /var/lib/docker/:/var/lib/docker:ro \
-        -p 1234:8080 \
-        --name cadvisor \
-        google/cadvisor
-
-    sudo hostess add cadvisor $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" cadvisor)
-    browser-exec "http://cadvisor:8080"
-}
-cheese(){
-    del_stopped cheese
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e DISPLAY=unix$DISPLAY \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/Pictures:/root/Pictures \
-        --device /dev/video0 \
-        --device /dev/snd \
-        --device /dev/dri \
-        --name cheese \
-        ${DOCKER_REPO_PREFIX}/cheese
-}
 consul(){
     del_stopped consul
 
@@ -144,15 +116,6 @@ consul(){
     sudo hostess add consul $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" consul)
     browser-exec "http://consul:8500"
 }
-gcalcli(){
-    docker run --rm -it \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.gcalcli/home:/home/gcalcli/home \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.gcalcli/work/oauth:/home/gcalcli/.gcalcli_oauth \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.gcalcli/work/gcalclirc:/home/gcalcli/.gcalclirc \
-        --name gcalcli \
-        ${DOCKER_REPO_PREFIX}/gcalcli "$@"
-}
 gimp(){
     del_stopped gimp
 
@@ -173,25 +136,6 @@ http(){
         --log-driver none \
         ${DOCKER_REPO_PREFIX}/httpie "$@"
 }
-kvm(){
-    del_stopped kvm
-    relies_on pulseaudio
-
-    # modprobe the module
-    sudo modprobe kvm
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -v /run/libvirt:/var/run/libvirt \
-        -e DISPLAY=unix$DISPLAY \
-        --link pulseaudio:pulseaudio \
-        -e PULSE_SERVER=pulseaudio \
-        --group-add audio \
-        --name kvm \
-        --privileged \
-        ${DOCKER_REPO_PREFIX}/kvm
-}
 libreoffice(){
     del_stopped libreoffice
 
@@ -211,81 +155,6 @@ lpass(){
         --name lpass \
         ${DOCKER_REPO_PREFIX}/lpass "$@"
 }
-masscan(){
-    docker run -it --rm \
-        --log-driver none \
-        --net host \
-        --cap-add NET_ADMIN \
-        --name masscan \
-        ${DOCKER_REPO_PREFIX}/masscan "$@"
-}
-mpd(){
-    del_stopped mpd
-
-    # adding cap sys_admin so I can use nfs mount
-    # the container runs as a unpriviledged user mpd
-    docker run -d \
-        --device /dev/snd \
-        --cap-add SYS_ADMIN \
-        -e MPD_HOST=/var/lib/mpd/socket \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /etc/exports:/etc/exports:ro \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.mpd:/var/lib/mpd \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.mpd.conf:/etc/mpd.conf \
-        --name mpd \
-        ${DOCKER_REPO_PREFIX}/mpd
-}
-mutt(){
-    # subshell so we dont overwrite variables
-    (
-    local account=$1
-    export IMAP_SERVER=""
-    export SMTP_SERVER=""
-
-    if [[ "$account" == "riseup" ]]; then
-        GMAIL=$MAIL_RISEUP
-        GMAIL_NAME=$MAIL_RISEUP_NAME
-        GMAIL_PASS=$MAIL_RISEUP_PASS
-        GMAIL_FROM=$MAIL_RISEUP_FROM
-        IMAP_SERVER=mail.riseup.net
-        SMTP_SERVER=$IMAP_SERVER
-    fi
-
-    docker run -it --rm \
-        -e GMAIL \
-        -e GMAIL_NAME \
-        -e GMAIL_PASS \
-        -e GMAIL_FROM \
-        -e GPG_ID \
-        -e IMAP_SERVER \
-        -e SMTP_SERVER \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.gnupg:/home/user/.gnupg:ro \
-        -v /etc/localtime:/etc/localtime:ro \
-        --name mutt${account} \
-        ${DOCKER_REPO_PREFIX}/mutt
-    )
-}
-ncmpc(){
-    del_stopped ncmpc
-
-    docker run --rm -it \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.mpd/socket:/var/run/mpd/socket \
-        -e MPD_HOST=/var/run/mpd/socket \
-        --name ncmpc \
-        ${DOCKER_REPO_PREFIX}/ncmpc "$@"
-}
-neoman(){
-    del_stopped neoman
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e DISPLAY=unix$DISPLAY \
-        --device /dev/bus/usb \
-        --device /dev/usb \
-        --name neoman \
-        ${DOCKER_REPO_PREFIX}/neoman
-}
 nes(){
     del_stopped nes
     local game=$1
@@ -297,11 +166,6 @@ nes(){
         --device /dev/snd \
         --name nes \
         ${DOCKER_REPO_PREFIX}/nes /games/${game}.rom
-}
-netcat(){
-    docker run --rm -it \
-        --net host \
-        ${DOCKER_REPO_PREFIX}/netcat "$@"
 }
 nginx(){
     del_stopped nginx
@@ -345,23 +209,6 @@ pulseaudio(){
         --name pulseaudio \
         ${DOCKER_REPO_PREFIX}/pulseaudio
 }
-rainbowstream(){
-    docker run -it --rm \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.rainbow_oauth:/root/.rainbow_oauth \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.rainbow_config.json:/root/.rainbow_config.json \
-        --name rainbowstream \
-        ${DOCKER_REPO_PREFIX}/rainbowstream
-}
-registrator(){
-    del_stopped registrator
-
-    docker run -d --restart always \
-        -v /var/run/docker.sock:/tmp/docker.sock \
-        --net host \
-        --name registrator \
-        gliderlabs/registrator consul:
-}
 remmina(){
     del_stopped remmina
 
@@ -375,34 +222,6 @@ remmina(){
         --name remmina \
         --net host \
         ${DOCKER_REPO_PREFIX}/remmina
-}
-ricochet(){
-    del_stopped ricochet
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e DISPLAY=unix$DISPLAY \
-        -e GDK_SCALE \
-        -e GDK_DPI_SCALE \
-        -e QT_DEVICE_PIXEL_RATIO \
-        --device /dev/dri \
-        --name ricochet \
-        ${DOCKER_REPO_PREFIX}/ricochet
-}
-rstudio(){
-    del_stopped rstudio
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/fastly-logs:/root/fastly-logs \
-        -v /dev/shm:/dev/shm \
-        -e DISPLAY=unix$DISPLAY \
-        -e QT_DEVICE_PIXEL_RATIO \
-        --device /dev/dri \
-        --name rstudio \
-        ${DOCKER_REPO_PREFIX}/rstudio
 }
 s3cmdocker(){
     del_stopped s3cmd
@@ -441,16 +260,6 @@ scudcloud(){
 
     # exit current shell
     exit 0
-}
-shorewall(){
-    del_stopped shorewall
-
-    docker run --rm -it \
-        --net host \
-        --cap-add NET_ADMIN \
-        --privileged \
-        --name shorewall \
-        ${DOCKER_REPO_PREFIX}/shorewall "$@"
 }
 skype(){
     del_stopped skype
@@ -501,41 +310,6 @@ spotify(){
         --name spotify \
         ${DOCKER_REPO_PREFIX}/spotify
 }
-steam(){
-    del_stopped steam
-    relies_on pulseaudio
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /etc/machine-id:/etc/machine-id:ro \
-        -v /var/run/dbus:/var/run/dbus \
-        -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.steam:/home/steam \
-        -e DISPLAY=unix$DISPLAY \
-        --link pulseaudio:pulseaudio \
-        -e PULSE_SERVER=pulseaudio \
-        --device /dev/dri \
-        --name steam \
-        ${DOCKER_REPO_PREFIX}/steam
-}
-t(){
-    docker run -t --rm \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.trc:/root/.trc \
-        --log-driver none \
-        ${DOCKER_REPO_PREFIX}/t "$@"
-}
-tarsnap(){
-    docker run --rm -it \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.tarsnaprc:/root/.tarsnaprc \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.tarsnap:/root/.tarsnap \
-        -v <%= node["dotfiles"]["profile"]["home"] %>:/root/workdir \
-        ${DOCKER_REPO_PREFIX}/tarsnap "$@"
-}
-telnet(){
-    docker run -it --rm \
-        --log-driver none \
-        ${DOCKER_REPO_PREFIX}/telnet "$@"
-}
 termboy(){
     del_stopped termboy
     local game=$1
@@ -550,48 +324,6 @@ traceroute(){
         --net host \
         ${DOCKER_REPO_PREFIX}/traceroute "$@"
 }
-transmission(){
-    del_stopped transmission
-
-    docker run -d \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/Torrents:/transmission/download \
-        -v <%= node["dotfiles"]["profile"]["home"] %>/.transmission:/transmission/config \
-        -p 9091:9091 \
-        -p 51413:51413 \
-        -p 51413:51413/udp \
-        --name transmission \
-        ${DOCKER_REPO_PREFIX}/transmission
-
-
-    sudo hostess add transmission $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" transmission)
-    browser-exec "http://transmission:9091"
-}
-virsh(){
-    relies_on kvm
-
-    docker run -it --rm \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /run/libvirt:/var/run/libvirt \
-        --log-driver none \
-        --net container:kvm \
-        ${DOCKER_REPO_PREFIX}/libvirt-client "$@"
-}
-virt_viewer(){
-    relies_on kvm
-
-    docker run -it --rm \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /tmp/.X11-unix:/tmp/.X11-unix  \
-        -e DISPLAY=unix$DISPLAY \
-        -v /run/libvirt:/var/run/libvirt \
-        -e PULSE_SERVER=pulseaudio \
-        --group-add audio \
-        --log-driver none \
-        --net container:kvm \
-        ${DOCKER_REPO_PREFIX}/virt-viewer "$@"
-}
-alias virt-viewer="virt_viewer"
 visualstudio(){
     del_stopped visualstudio
 
@@ -642,13 +374,6 @@ wireshark(){
         --name wireshark \
         ${DOCKER_REPO_PREFIX}/wireshark
 }
-wrk(){
-    docker run -it --rm \
-        --log-driver none \
-        --name wrk \
-        ${DOCKER_REPO_PREFIX}/wrk "$@"
-}
-
 ###
 ### Awesome sauce by @jpetazzo
 ###
