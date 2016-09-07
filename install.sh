@@ -54,12 +54,13 @@ cat <<EOF
 EOF
 
 platform=$(cat /etc/*-release | awk 'NR==1{print $1}')
-
-if [ "${platform}" != "Antergos" ]; then
-    curl --silent --show-error https://omnitruck.chef.io/install.sh | \
-    sudo -E bash -s -- -c stable -P chefdk || prompt_continue
-else
-    yaourt -Sy chef-dk
+if [ -z $(command -v chef) ]; then
+    if [ "${platform}" != "Antergos" ]; then
+        curl --silent --show-error https://omnitruck.chef.io/install.sh | \
+        sudo -E bash -s -- -c stable -P chefdk || prompt_continue
+    else
+        yaourt -Sy chef-dk
+    fi
 fi
 
 echo ">>> Downloading cookbook dependencies with Berkshelf"

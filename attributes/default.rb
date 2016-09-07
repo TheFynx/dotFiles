@@ -14,4 +14,4 @@ else
 end
 
 
-["dotfiles"]["docker"]["user"] = "thefynx"
+default["dotfiles"]["docker"]["user"] = "thefynx"
