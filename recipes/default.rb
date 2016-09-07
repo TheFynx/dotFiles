@@ -32,7 +32,7 @@
   functions
   path
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home_path"]}/.#{filename}" do
+  template "#{node["dotfiles"]["profile"]["home"]}/.#{filename}" do
     source "#{filename}.sh.erb"
     owner node["dotfiles"]["profile"]["user"]
     group node["dotfiles"]["profile"]["group"]
@@ -45,7 +45,7 @@ end
   gitignore
   vimrc
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home_path"]}/.#{filename}" do
+  template "#{node["dotfiles"]["profile"]["home"]}/.#{filename}" do
     source "#{filename}.erb"
     owner node["dotfiles"]["profile"]["user"]
     group node["dotfiles"]["profile"]["group"]
@@ -54,12 +54,12 @@ end
 end
 
 if platform_family?('debian') || platform_family?('fedora') || platform_family?('arch')
-    directory "#{node["dotfiles"]["profile"]["home_path"]}./config/terminator" do
+    directory "#{node["dotfiles"]["profile"]["home"]}./config/terminator" do
         owner node["dotfiles"]["profile"]["user"]
         group node["dotfiles"]["profile"]["group"]
         mode 00775
     end
-    template "#{node["dotfiles"]["profile"]["home_path"]}/.config/terminator/config" do
+    template "#{node["dotfiles"]["profile"]["home"]}/.config/terminator/config" do
         source "terminator/config.erb"
         owner node["dotfiles"]["profile"]["user"]
         group node["dotfiles"]["profile"]["group"]
