@@ -35,7 +35,7 @@ export SCM_CHECK=true
 # Prompt Config
 [ -z "$PS1" ] && return
 
-if [ -z $(command -v exa) ]; then
+if [ -n $(command -v exa) ]; then
     alias ls='exa'
 fi
 
