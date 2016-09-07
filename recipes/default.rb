@@ -53,8 +53,8 @@ end
   end
 end
 
-case platform
-when "linux"
+case platform_family
+when debian,fedora,arch,rhel
     directory "#{node["dotfiles"]["profile"]["home_path"]./config/terminator do
         owner node["dotfiles"]["profile"]["user"]
         group node["dotfiles"]["profile"]["group"]
