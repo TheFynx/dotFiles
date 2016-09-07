@@ -53,9 +53,18 @@ end
   end
 end
 
-template "#{node["dotfiles"]["profile"]["home_path"]}/.config/terminator/config" do
-    source "terminator/config.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
-    mode 00775
+case platform
+when "linux"
+    directory "#{node["dotfiles"]["profile"]["home_path"]./config/terminator do
+        owner node["dotfiles"]["profile"]["user"]
+        group node["dotfiles"]["profile"]["group"]
+        mode 00775
+    end
+
+    template "#{node["dotfiles"]["profile"]["home_path"]}/.config/terminator/config" do
+        source "terminator/config.erb"
+        owner node["dotfiles"]["profile"]["user"]
+        group node["dotfiles"]["profile"]["group"]
+        mode 00775
+    end
 end

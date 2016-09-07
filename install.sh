@@ -43,7 +43,7 @@ fi
 
 # create client.rb file so that Chef client can find its dependant cookbooks
 cat > "${tempInstallDir}/client.rb" <<EOF
-cookbook_path File.join(Dir.pwd, 'berks-cookbooks')
+cookbook_path "${tempInstallDir}/berks-cookbooks"
 local_mode true
 chef_zero.enabled
 json_attribs "${tempInstallDir}/attributes.json"
@@ -73,7 +73,7 @@ cat > "${tempInstallDir}/attributes.json" << EOF
 EOF
 
 echo ">>> Running chef-client (installed by ChefDK) to bootstrap these dotFiles"
-sudo -E chef-client error -c "${tempInstallDir}/client.rb" || prompt_continue
+sudo -E chef-client -c "${tempInstallDir}/client.rb" || prompt_continue
 
 # cleanup
 cd - || prompt_continue
