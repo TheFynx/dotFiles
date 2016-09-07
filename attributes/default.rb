@@ -3,7 +3,7 @@ when "mac_os_x"
   default["dotfiles"]["profile"].tap do |profile|
     profile["group"] = "levi",
     profile["group"] = "staff",
-    profile["home"] = "/Users//#{node["dotfiles"]["profile"]["user"]}"
+    profile["home"] = "/Users/#{node["dotfiles"]["profile"]["user"]}"
   end
 
 when "windows"
@@ -16,7 +16,7 @@ else
   default["dotfiles"]["profile"].tap do |profile|
     profile["group"] = "levi",
     profile["group"] = "levi",
-    profile["home"] = "/home//#{node["dotfiles"]["profile"]["user"]}"
+    profile["home"] = "/home/#{node["dotfiles"]["profile"]["user"]}"
   end
 end
 
