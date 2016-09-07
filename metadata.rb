@@ -3,5 +3,5 @@ maintainer "Levi Smith"
 maintainer_email "levi@fynx.me"
 license "MIT"
 description "A collection of dotfiles."
-long_description "See the README for more details."
-version "1.0.0"
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+version "1.0.1"

@@ -68,7 +68,7 @@ nginx_config(){
 #
 # Container Aliases
 #
-aws(){
+daws(){
     docker run -it --rm \
         -v <%= node["dotfiles"]["profile"]["home"] %>/.aws:/root/.aws \
         --log-driver none \
@@ -233,7 +233,7 @@ s3cmdocker(){
         --name s3cmd \
         ${DOCKER_REPO_PREFIX}/s3cmd "$@"
 }
-scudcloud(){
+dscudcloud(){
     del_stopped scudcloud
 
     docker run -d \
@@ -278,7 +278,7 @@ skype(){
         --name skype \
         ${DOCKER_REPO_PREFIX}/skype
 }
-slack(){
+dslack(){
     del_stopped slack
 
     sudo docker run -d \
@@ -324,7 +324,7 @@ traceroute(){
         --net host \
         ${DOCKER_REPO_PREFIX}/traceroute "$@"
 }
-visualstudio(){
+dvisualstudio(){
     del_stopped visualstudio
 
     docker run -d \
@@ -334,7 +334,7 @@ visualstudio(){
         --name visualstudio \
         ${DOCKER_REPO_PREFIX}/visualstudio
 }
-vlc(){
+dvlc(){
     del_stopped vlc
     relies_on pulseaudio
 

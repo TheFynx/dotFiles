@@ -34,8 +34,9 @@ EOF
 
 read -p ">>> dotFile Install -- Do you wish to bootstrap the system at this time?; y/n (default n)" bootstrapAnswer
 
+shopt -s nocasematch
 # If bootstrapping, adding bootstrap to deps
-if [[ ${bootstrapAnswer} == [yY]* ]]; then
+if [ "${bootstrapAnswer}" == "y" ]; then
     echo "cookbook "${bootstrapCookbook}", git: '${bootstrapGit}'" >> ${tempInstallDir}/Berksfile
     echo ">>> Bootstrap added to dependencies and runlist"
 fi
@@ -54,7 +55,7 @@ EOF
 
 platform=$(cat /etc/*-release | awk 'NR==1{print $1}')
 
-if [ $platform != "Antergos" ]; then
+if [ "${platform}" != "Antergos" ]; then
     curl --silent --show-error https://omnitruck.chef.io/install.sh | \
     sudo -E bash -s -- -c stable -P chefdk || prompt_continue
 else
@@ -67,17 +68,7 @@ chef exec berks vendor || prompt_continue
 
 
 cat > "${tempInstallDir}/attributes.json" << EOF
-{
-    "${dotFilesCookbook}": {
-        "profile": {
-            "user": "levi",
-            "group": "levi"
-        }
-    },
-    "run_list": [
-        "recipe[${dotFilesCookbook}]"
-    ]
-}
+{ "run_list": [ "recipe[${dotFilesCookbook}::default]" ] }
 EOF
 
 echo ">>> Running chef-client (installed by ChefDK) to bootstrap these dotFiles"
