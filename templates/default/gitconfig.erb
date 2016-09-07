@@ -1,6 +1,7 @@
 [user]
     name = Levi Smith
     email = levi@fynx.me
+    signingkey = D90531EB37150235
 [core]
     editor = vim
     autocrlf = input
@@ -51,3 +52,5 @@
     amend = commit --amend -C HEAD
     l = log --graph --pretty=format:'%Cgreen%h%Cblue%d %C(white)%s %Cblue%an %C(white)[%ar]'
     la = log --all --graph --pretty=format:'%Cgreen%h%Cblue%d %C(white)%s %Cblue%an %C(white)[%ar]'
+[commit]
+    gpgsign = true
