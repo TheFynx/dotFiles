@@ -4,18 +4,19 @@ if [ -d "/usr/share/bcc/tools" ]; then
 fi
 
 if [ -d "/usr/local/bin" ]; then
-    export PATH=/usr/local/bin
+    export PATH=/usr/local/bin:$PATH
 fi
 
 # Add home local bin
 if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.local/bin" ]; then
-    export PATH=<%= node["dotfiles"]["profile"]["home"] %>/.local/bin
+    export PATH=<%= node["dotfiles"]["profile"]["home"] %>/.local/bin:$PATH
 fi
 
 # include sbin in PATH
 if [ -d "/sbin" ]; then
     export PATH="/sbin:$PATH"
 fi
+
 
 if [ -d "/usr/sbin" ]; then
     export PATH="/usr/sbin:$PATH"
