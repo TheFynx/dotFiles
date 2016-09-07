@@ -8,7 +8,9 @@ set -o nounset -o pipefail
 dotFilesCookbook="dotfiles"
 dotfilesGit="https://github.com/thefynx/${dotFilesCookbook}.git"
 
-tempInstallDir="mktemp -d -t dotfiles"
+tempInstallDir="/tmp/chef"
+
+mkdir -p /tmp/chef
 
 function prompt_continue () {
   echo "!!!!!!!!!!!!!!!!!!!!!!!"
@@ -27,13 +29,13 @@ function prompt_continue () {
 # create Berksfile so that we can install the correct cookbook dependencies
 cat > "${tempInstallDir}/Berksfile" <<EOF
 source 'https://supermarket.chef.io'
-cookbook "${dotFilesCookbook}", git: '${dotfilesGit}'
+cookbook "${dotFilesCookbook}", git: '${dotfilesGit}', branch: "revamp-2"
 EOF
 
 read -p ">>> dotFile Install -- Do you wish to bootstrap the system at this time?; y/n (default n)" bootstrapAnswer
 
 # If bootstrapping, adding bootstrap to deps
-if [ ${bootstrapAnswer} == [yY]* ]; then
+if [[ ${bootstrapAnswer} == [yY]* ]]; then
     echo "cookbook "${bootstrapCookbook}", git: '${bootstrapGit}'" >> ${tempInstallDir}/Berksfile
     echo ">>> Bootstrap added to dependencies and runlist"
 fi
@@ -50,11 +52,13 @@ cat <<EOF
 >>> Installing ChefDK
 EOF
 
-if [[ "$INSTALL_CHEFDK" -eq 1 ]]
-then
-  echo "Installing ChefDK ${CHEFDK_TARGET_VERSION}"
-  curl --silent --show-error https://omnitruck.chef.io/install.sh | \
+platform=$(cat /etc/*-release | awk 'NR==1{print $1}')
+
+if [ $platform != "Antergos" ]; then
+    curl --silent --show-error https://omnitruck.chef.io/install.sh | \
     sudo -E bash -s -- -c stable -P chefdk || prompt_continue
+else
+    yaourt -Sy chef-dk
 fi
 
 echo ">>> Downloading cookbook dependencies with Berkshelf"

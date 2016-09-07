@@ -29,7 +29,9 @@ end
   end
 end
 
-cookbook_file "#{node[:dotfiles][:home_path]}/.config/terminator/config" do
-    source 'terminator/config'
-    owner node[:dotfiles][:user]
+template "#{node["dotfiles"]["profile"]["home_path"]}/.config/terminator/config" do
+    source "terminator/config.erb"
+    owner node["dotfiles"]["profile"]["user"]
+    group node["dotfiles"]["profile"]["group"]
+    mode 00775
 end
