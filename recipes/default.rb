@@ -53,14 +53,12 @@ end
   end
 end
 
-case platform_family
-when debian,fedora,arch,rhel
-    directory "#{node["dotfiles"]["profile"]["home_path"]./config/terminator do
+if platform_family?('debian') || platform_family?('fedora') || platform_family?('arch')
+    directory "#{node["dotfiles"]["profile"]["home_path"]}./config/terminator" do
         owner node["dotfiles"]["profile"]["user"]
         group node["dotfiles"]["profile"]["group"]
         mode 00775
     end
-
     template "#{node["dotfiles"]["profile"]["home_path"]}/.config/terminator/config" do
         source "terminator/config.erb"
         owner node["dotfiles"]["profile"]["user"]
