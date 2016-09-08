@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-case platform_family
+case node['platform_family']
 when "windows"
   include_recipe 'dotfiles::windows'
 when "mac_os_x"
