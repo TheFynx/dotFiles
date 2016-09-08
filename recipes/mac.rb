@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: dotfiles
-# Recipe:: default
+# Recipe:: mac
 #
 # Copyright (C) 2016 Levi Smith
 #

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: dotfiles
-# Recipe:: default
+# Recipe:: windows
 #
 # Copyright (C) 2016 Levi Smith
 #
@@ -25,16 +25,6 @@
 %w(
   bash_profile
   bashrc
-).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home"]}/_#{filename}" do
-    source "#{filename}.sh.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
-    mode 00775
-  end
-end
-
-%w(
   profile
   exports
   aliases
