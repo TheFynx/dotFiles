@@ -25,7 +25,7 @@
 case platform_family
 when "windows"
   include_recipe 'dotfiles::windows'
-when "mac_osx"
+when "mac_os_x"
   include_recipe 'dotfiles::mac'
 else
   include_recipe 'dotfiles::linux'
