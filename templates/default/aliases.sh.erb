@@ -28,6 +28,9 @@ alias fuck='sudo $(history -p \!\!)'
 alias gsc='git commit -S -a -m'
 alias rtfm='man $(history -p \!\!)'
 
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec $SHELL -l"
+
 <% if node['platform_family'] == 'mac_os_x' %>
 # Mac Specific Aliases
 alias update_os='sudo softwareupdate -i -a'
