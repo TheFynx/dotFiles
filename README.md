@@ -18,6 +18,7 @@ Most configurable items are found in [attributes](attributes/default.rb)
 
 ## Thanks
 Shamelessly stole from these repos/setups
-Britt Gresham [dotfiles](https://github.com/demophoon/dotfiles)
-Jess Frazelle [dotfiles](https://github.com/jfrazelle/dotfiles)
-Simon Smith [dotfiles](https://github.com/simonsmith/dotfiles)
+
+* Britt Gresham [dotfiles](https://github.com/demophoon/dotfiles)
+* Jess Frazelle [dotfiles](https://github.com/jfrazelle/dotfiles)
+* Simon Smith [dotfiles](https://github.com/simonsmith/dotfiles)
