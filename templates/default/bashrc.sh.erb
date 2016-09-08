@@ -28,7 +28,7 @@ export TODO="t"
 # Set this to false to turn off version control status checking within the prompt for all themes
 export SCM_CHECK=true
 
-# added by travis gem
+# For Travis CLI
 [ -f <%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh ] && source <%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh
 
 
@@ -69,6 +69,18 @@ if ! shopt -oq posix; then
         . /etc/bash_completion
     fi
 fi
+
+if [ -n $(command -v brew) ]; then
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+        . $(brew --prefix)/etc/bash_completion
+    fi
+    if [ -d $(brew --prefix)/etc/bash_completion.d ]; then
+        for file in $(brew --prefix)/etc/bash_completion.d/* ; do
+            source "$file"
+        done
+    fi
+fi
+
 if [ -d /etc/bash_completion.d ]; then
     for file in /etc/bash_completion.d/* ; do
         source "$file"
