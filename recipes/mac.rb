@@ -52,3 +52,18 @@ end
     mode 00775
   end
 end
+
+# Keybindings
+
+directory "#{node["dotfiles"]["profile"]["home"]}/Library/KeyBindings" do
+  owner node["dotfiles"]["profile"]["user"]
+  group node["dotfiles"]["profile"]["group"]
+  mode 00775
+end
+
+template "#{node["dotfiles"]["profile"]["home"]}/Library/KeyBindings/DefaultKeyBinding.dict" do
+  source 'DefaultKeyBinding.dict.erb'
+  owner node["dotfiles"]["profile"]["user"]
+  group node["dotfiles"]["profile"]["group"]
+  mode 00775
+end

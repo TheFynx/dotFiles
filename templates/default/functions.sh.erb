@@ -82,6 +82,15 @@ if [ $? -eq 0 ]; then
     }
 fi
 
+# Cloudformation Verify
+cfnver() {
+    if [ -n $(command -v aws) ]; then
+        aws cloudformation validate-template --template-body file://"$(pwd)/${1}"
+    else
+        echo "Please install aws to use this command"
+    fi
+}
+
 # Create a data URL from a file
 dataurl() {
     local mimeType=$(file -b --mime-type "$1")
