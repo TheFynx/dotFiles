@@ -27,6 +27,6 @@ if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/bin" ]; then
 fi
 
 # Add shim/rbenv to path.
-if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.rbenv" ]; then
+if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims" ]; then
   export "<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims:$PATH"
 fi
