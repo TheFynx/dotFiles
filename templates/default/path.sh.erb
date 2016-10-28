@@ -31,6 +31,11 @@ if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims" ]; then
     export PATH="<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims:$PATH"
 fi
 
+# set GOPATH if it exists
+if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.go" ]; then
+    export GOPATH="<%= node["dotfiles"]["profile"]["home"] %>/.go"
+fi
+
 # Add Go Bin to PATH
 if [ -d "$GOPATH/bin" ]; then
     export PATH="$PATH:$GOPATH/bin"
