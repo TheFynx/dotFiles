@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# rubocop:disable Style/NumericLiteralPrefix
+
 %w(
   bash_profile
   bashrc
@@ -32,10 +34,10 @@
   functions
   path
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home"]}/.#{filename}" do
+  template "#{node['dotfiles']['profile']['home']}/.#{filename}" do
     source "#{filename}.sh.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
     mode 00775
   end
 end
@@ -43,10 +45,10 @@ end
 %w(
   vimrc
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home"]}/_#{filename}" do
+  template "#{node['dotfiles']['profile']['home']}/_#{filename}" do
     source "#{filename}.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
     mode 00775
   end
 end
@@ -55,10 +57,10 @@ end
   gitconfig
   gitignore
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home"]}/.#{filename}" do
+  template "#{node['dotfiles']['profile']['home']}/.#{filename}" do
     source "#{filename}.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
     mode 00775
   end
 end

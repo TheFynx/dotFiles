@@ -22,6 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# rubocop:disable Style/NumericLiteralPrefix
+# rubocop:disable Metrics/LineLength
+
 %w(
   bash_profile
   bashrc
@@ -32,10 +35,10 @@
   functions
   path
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home"]}/.#{filename}" do
+  template "#{node['dotfiles']['profile']['home']}/.#{filename}" do
     source "#{filename}.sh.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
     mode 00775
   end
 end
@@ -45,25 +48,45 @@ end
   gitignore
   vimrc
 ).each do |filename|
-  template "#{node["dotfiles"]["profile"]["home"]}/.#{filename}" do
+  template "#{node['dotfiles']['profile']['home']}/.#{filename}" do
     source "#{filename}.erb"
-    owner node["dotfiles"]["profile"]["user"]
-    group node["dotfiles"]["profile"]["group"]
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
     mode 00775
   end
 end
 
 # Keybindings
-
-directory "#{node["dotfiles"]["profile"]["home"]}/Library/KeyBindings" do
-  owner node["dotfiles"]["profile"]["user"]
-  group node["dotfiles"]["profile"]["group"]
+directory "#{node['dotfiles']['profile']['home']}/Library/KeyBindings" do
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
   mode 00775
 end
 
-template "#{node["dotfiles"]["profile"]["home"]}/Library/KeyBindings/DefaultKeyBinding.dict" do
+template "#{node['dotfiles']['profile']['home']}/Library/KeyBindings/DefaultKeyBinding.dict" do
   source 'DefaultKeyBinding.dict.erb'
-  owner node["dotfiles"]["profile"]["user"]
-  group node["dotfiles"]["profile"]["group"]
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
   mode 00775
+end
+
+# MAC Specific Options to Set
+template "#{node['dotfiles']['profile']['home']}/.mac_options.sh" do
+  source 'mac.options.sh.erb'
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
+  mode 00775
+end
+
+execute 'mac_options' do
+  command "#{node['dotfiles']['profile']['home']}/.mac_options.sh"
+end
+
+# Fonts
+remote_directory "#{node['dotfiles']['profile']['home']}/Library/Fonts" do
+  source 'fonts'
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
+  mode 00775
+  action :create
 end

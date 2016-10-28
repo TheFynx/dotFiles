@@ -23,9 +23,9 @@
 # SOFTWARE.
 
 case node['platform_family']
-when "windows"
+when 'windows'
   include_recipe 'dotfiles::windows'
-when "mac_os_x"
+when 'mac_os_x'
   include_recipe 'dotfiles::mac'
 else
   include_recipe 'dotfiles::linux'
