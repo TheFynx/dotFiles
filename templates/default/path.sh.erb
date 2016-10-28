@@ -28,10 +28,10 @@ fi
 
 # Add shim/rbenv to path.
 if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims" ]; then
-  export "<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims:$PATH"
+    export PATH="<%= node["dotfiles"]["profile"]["home"] %>/.rbenv/shims:$PATH"
 fi
 
 # Add Go Bin to PATH
 if [ -d "$GOPATH/bin" ]; then
-  export "export PATH=$PATH:$GOPATH/bin"
+    export "export PATH=$PATH:$GOPATH/bin"
 fi
