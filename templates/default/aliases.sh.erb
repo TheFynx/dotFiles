@@ -28,11 +28,6 @@ alias fuck='sudo $(history -p \!\!)'
 alias gsc='git commit -S -a -m'
 alias rtfm='man $(history -p \!\!)'
 
-# Cloudformation
-if [ -n $(command -v aws) ]; then
-    alias cfnv="aws cloudformation validate-template --template-body file:///$(pwd)/$@"
-fi
-
 # Reload the shell (i.e. invoke as a login shell)
 alias reload="exec $SHELL -l"
 

@@ -82,6 +82,12 @@ if [ $? -eq 0 ]; then
     }
 fi
 
+<% if node['platform_family'] == 'mac_os_x' %>
+fixcamera(){
+    sudo killall AppleCameraAssistant;sudo killall VDCAssistant
+}
+<% end %>
+
 # Cloudformation Verify
 cfnver() {
     if [ -n $(command -v aws) ]; then
