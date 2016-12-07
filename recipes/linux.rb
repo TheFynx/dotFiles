@@ -67,3 +67,13 @@ template "#{node['dotfiles']['profile']['home']}/.config/terminator/config" do
   group node['dotfiles']['profile']['group']
   mode 00775
 end
+
+# Fonts
+remote_directory "#{node['dotfiles']['profile']['home']}/.local/share/fonts" do
+  source 'fonts'
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
+  mode 00775
+  action :create
+end
+
