@@ -1,47 +1,17 @@
-case profile
-when "work"
-    case platform
-    when "mac_os_x"
-        default[:dotfiles] = {
-            user: "levi.smith",
-            group: "levi.smith",
-            home_path: "/Users/levi.smith"
-        }
-    else
-        default[:dotfiles] = {
-           user: "levi.smith",
-           group: "levi.smith",
-           home_path: "/home/levi.smith"
-        }
-   end
-when "personal"
-    case platform
-    when "mac_os_x"
-        default[:dotfiles] = {
-            user: "levi",
-            group: "staff",
-            home_path: "/Users/levi"
-        }
-    else
-        default[:dotfiles] = {
-           user: "levi",
-           group: "levi",
-           home_path: "/home/levi"
-        }
-    end
+case platform
+when "mac_os_x"
+    default["dotfiles"]["profile"]["user"] = "levi"
+    default["dotfiles"]["profile"]["group"] = "staff"
+    default["dotfiles"]["profile"]["home"] = "/Users/#{node["dotfiles"]["profile"]["user"]}"
+when "windows"
+    default["dotfiles"]["profile"]["user"] = "levi"
+    default["dotfiles"]["profile"]["group"] = "levi"
+    default["dotfiles"]["profile"]["home"] = "C:/users/#{node["dotfiles"]["profile"]["user"]}"
 else
-    case platform
-    when "mac_os_x"
-        default[:dotfiles] = {
-            user: "vagrant",
-            group: "vagrant",
-            home_path: "/Users/vagrant"
-        }
-    else
-        default[:dotfiles] = {
-           user: "vagrant",
-           group: "vagrant",
-           home_path: "/home/vagrant"
-        }
-    end
+    default["dotfiles"]["profile"]["user"] = "levi"
+    default["dotfiles"]["profile"]["group"] = "levi"
+    default["dotfiles"]["profile"]["home"] = "/home/#{node["dotfiles"]["profile"]["user"]}"
 end
+
+
+default["dotfiles"]["docker"]["user"] = "thefynx"

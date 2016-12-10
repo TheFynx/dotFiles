@@ -1,0 +1,402 @@
+#!/bin/bash
+# Bash wrappers for docker run commands
+
+export DOCKER_REPO_PREFIX='<%= node["dotfiles"]["docker"]["user"] %>'
+
+#
+# Helper Functions
+#
+dcleanup(){
+    docker rm $(docker ps -aq 2>/dev/null) 2>/dev/null
+    docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+    docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+}
+del_stopped(){
+    local name=$1
+    local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
+
+    if [[ "$state" == "false" ]]; then
+        docker rm $name
+    fi
+}
+relies_on(){
+    local containers=$@
+
+    for container in $containers; do
+        local state=$(docker inspect --format "{{.State.Running}}" $container 2>/dev/null)
+
+        if [[ "$state" == "false" ]] || [[ "$state" == "" ]]; then
+            echo "$container is not running, starting it for you."
+            $container
+        fi
+    done
+}
+# creates an nginx config for a local route
+nginx_config(){
+    server=$1
+    route=$2
+
+    cat >${HOME}/.nginx/conf.d/${server}.conf <<-EOF
+    upstream ${server} { server ${route}; }
+    server {
+    server_name ${server};
+
+    location / {
+    proxy_pass  http://${server};
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade \$http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host \$http_host;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+    proxy_set_header X-Forwarded-For \$remote_addr;
+    proxy_set_header X-Forwarded-Port \$server_port;
+    proxy_set_header X-Request-Start \$msec;
+}
+    }
+EOF
+
+    # restart nginx
+    docker restart nginx
+
+    # add host to /etc/hosts
+    sudo hostess add $server 127.0.0.1
+
+    # open browser
+    browser-exec "http://${server}"
+}
+
+#
+# Container Aliases
+#
+daws(){
+    docker run -it --rm \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.aws:/root/.aws \
+        --log-driver none \
+        --name aws \
+        ${DOCKER_REPO_PREFIX}/awscli "$@"
+}
+bees(){
+    docker run -it --rm \
+        -e NOTARY_TOKEN \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.bees:/root/.bees \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.boto:/root/.boto \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.dev:/root/.ssh:ro \
+        --log-driver none \
+        --name bees \
+        ${DOCKER_REPO_PREFIX}/beeswithmachineguns "$@"
+}
+consul(){
+    del_stopped consul
+
+    # check if we passed args and if consul is running
+    local args=$@
+    local state=$(docker inspect --format "{{.State.Running}}" consul 2>/dev/null)
+    if [[ "$state" == "true" ]] && [[ ! -z "$args" ]]; then
+        docker exec -it consul consul "$@"
+        return 0
+    fi
+
+    docker run -d \
+        --restart always \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.consul:/etc/consul.d \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        --net host \
+        -e GOMAXPROCS=2 \
+        --name consul \
+        ${DOCKER_REPO_PREFIX}/consul agent \
+        -bootstrap-expect 1 \
+        -config-dir /etc/consul.d \
+        -data-dir /data \
+        -encrypt $(docker run --rm ${DOCKER_REPO_PREFIX}/consul keygen) \
+        -ui-dir /usr/src/consul \
+        -server \
+        -dc neverland \
+        -bind 0.0.0.0
+
+    sudo hostess add consul $(docker inspect --format "{{.NetworkSettings.Networks.bridge.IPAddress}}" consul)
+    browser-exec "http://consul:8500"
+}
+gimp(){
+    del_stopped gimp
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/Pictures:/root/Pictures \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.gtkrc:/root/.gtkrc \
+        -e GDK_SCALE \
+        -e GDK_DPI_SCALE \
+        --name gimp \
+        ${DOCKER_REPO_PREFIX}/gimp
+}
+http(){
+    docker run -t --rm \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        --log-driver none \
+        ${DOCKER_REPO_PREFIX}/httpie "$@"
+}
+libreoffice(){
+    del_stopped libreoffice
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/slides:/root/slides \
+        -e GDK_SCALE \
+        -e GDK_DPI_SCALE \
+        --name libreoffice \
+        ${DOCKER_REPO_PREFIX}/libreoffice
+}
+lpass(){
+    docker run --rm -it \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.lpass:/root/.lpass \
+        --name lpass \
+        ${DOCKER_REPO_PREFIX}/lpass "$@"
+}
+nes(){
+    del_stopped nes
+    local game=$1
+
+    docker run -d \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        --device /dev/dri \
+        --device /dev/snd \
+        --name nes \
+        ${DOCKER_REPO_PREFIX}/nes /games/${game}.rom
+}
+nginx(){
+    del_stopped nginx
+
+    docker run -d \
+        --restart always \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.nginx:/etc/nginx \
+        --net host \
+        --name nginx \
+        nginx
+
+    # add domain to hosts & open nginx
+    sudo hostess add jess 127.0.0.1
+}
+nmap(){
+    docker run --rm -it \
+        --net host \
+        ${DOCKER_REPO_PREFIX}/nmap "$@"
+}
+pandoc(){
+    local file=${@: -1}
+    local lfile=$(readlink -m "$(pwd)/${file}")
+    local rfile=$(readlink -m "/$(basename $file)")
+    local args=${@:1:${#@}-1}
+
+    docker run --rm \
+        -v ${lfile}:${rfile} \
+        -v /tmp:/tmp \
+        --name pandoc \
+        ${DOCKER_REPO_PREFIX}/pandoc ${args} ${rfile}
+}
+pulseaudio(){
+    del_stopped pulseaudio
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        --device /dev/snd \
+        -p 4713:4713 \
+        --restart always \
+        --group-add audio \
+        --name pulseaudio \
+        ${DOCKER_REPO_PREFIX}/pulseaudio
+}
+remmina(){
+    del_stopped remmina
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -e GDK_SCALE \
+        -e GDK_DPI_SCALE \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.remmina:/root/.remmina \
+        --name remmina \
+        --net host \
+        ${DOCKER_REPO_PREFIX}/remmina
+}
+s3cmdocker(){
+    del_stopped s3cmd
+
+    docker run --rm -it \
+        -e AWS_ACCESS_KEY="${DOCKER_AWS_ACCESS_KEY}" \
+        -e AWS_SECRET_KEY="${DOCKER_AWS_ACCESS_SECRET}" \
+        -v $(pwd):/root/s3cmd-workspace \
+        --name s3cmd \
+        ${DOCKER_REPO_PREFIX}/s3cmd "$@"
+}
+dscudcloud(){
+    del_stopped scudcloud
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -v /etc/machine-id:/etc/machine-id:ro \
+        -v /var/run/dbus:/var/run/dbus \
+        -v /var/run/user/$(id -u):/var/run/user/$(id -u) \
+        -e TERM \
+        -e XAUTHORITY \
+        -e DBUS_SESSION_BUS_ADDRESS \
+        -e HOME \
+        -e QT_DEVICE_PIXEL_RATIO \
+        -v /etc/passwd:/etc/passwd:ro \
+        -v /etc/group:/etc/group:ro \
+        -u $(whoami) -w "<%= node["dotfiles"]["profile"]["home"] %>" \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.Xauthority:<%= node["dotfiles"]["profile"]["home"] %>/.Xauthority \
+        -v /etc/machine-id:/etc/machine-id:ro \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.scudcloud:<%= node["dotfiles"]["profile"]["home"] %>/.config/scudcloud \
+        --device /dev/snd \
+        --name scudcloud \
+        ${DOCKER_REPO_PREFIX}/scudcloud
+
+    # exit current shell
+    exit 0
+}
+skype(){
+    del_stopped skype
+    relies_on pulseaudio
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        --link pulseaudio:pulseaudio \
+        -e PULSE_SERVER=pulseaudio \
+        --security-opt seccomp:unconfined \
+        --device /dev/video0 \
+        --group-add video \
+        --group-add audio \
+        --name skype \
+        ${DOCKER_REPO_PREFIX}/skype
+}
+dslack(){
+    del_stopped slack
+
+    sudo docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        --device /dev/snd \
+        --device /dev/dri \
+        --device /dev/video0 \
+        --group-add audio \
+        --group-add video \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/.slack:/root/.config/Slack \
+        --name slack \
+        ${DOCKER_REPO_PREFIX}/slack
+}
+spotify(){
+    del_stopped spotify
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -e QT_DEVICE_PIXEL_RATIO \
+        --security-opt seccomp:unconfined \
+        --device /dev/snd \
+        --device /dev/dri \
+        --group-add audio \
+        --group-add video \
+        --name spotify \
+        ${DOCKER_REPO_PREFIX}/spotify
+}
+termboy(){
+    del_stopped termboy
+    local game=$1
+
+    docker run --rm -it \
+        --device /dev/snd \
+        --name termboy \
+        ${DOCKER_REPO_PREFIX}/nes /games/${game}.rom
+}
+traceroute(){
+    docker run --rm -it \
+        --net host \
+        ${DOCKER_REPO_PREFIX}/traceroute "$@"
+}
+dvisualstudio(){
+    del_stopped visualstudio
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix  \
+        -e DISPLAY=unix$DISPLAY \
+        --name visualstudio \
+        ${DOCKER_REPO_PREFIX}/visualstudio
+}
+dvlc(){
+    del_stopped vlc
+    relies_on pulseaudio
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        -e GDK_SCALE \
+        -e GDK_DPI_SCALE \
+        -e QT_DEVICE_PIXEL_RATIO \
+        --link pulseaudio:pulseaudio \
+        -e PULSE_SERVER=pulseaudio \
+        --group-add audio \
+        --group-add video \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/Torrents:/home/vlc/Torrents \
+        --device /dev/dri \
+        --name vlc \
+        ${DOCKER_REPO_PREFIX}/vlc
+}
+watchman(){
+    del_stopped watchman
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v <%= node["dotfiles"]["profile"]["home"] %>/Downloads:/root/Downloads \
+        --name watchman \
+        ${DOCKER_REPO_PREFIX}/watchman --foreground
+}
+wireshark(){
+    del_stopped wireshark
+
+    docker run -d \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=unix$DISPLAY \
+        --net host \
+        --name wireshark \
+        ${DOCKER_REPO_PREFIX}/wireshark
+}
+###
+### Awesome sauce by @jpetazzo
+###
+command_not_found_handle () {
+    # Check if there is a container image with that name
+    if ! docker inspect --format '{{ .Author }}' "$1" >&/dev/null ; then
+        echo "$0: $1: command not found"
+        return
+    fi
+
+    # Check that it's really the name of the image, not a prefix
+    if docker inspect --format '{{ .Id }}' "$1" | grep -q "^$1" ; then
+        echo "$0: $1: command not found"
+        return
+    fi
+
+    docker run -ti -u $(whoami) -w "<%= node["dotfiles"]["profile"]["home"] %>" \
+        $(env | cut -d= -f1 | awk '{print "-e", $1}') \
+        --device /dev/snd \
+        -v /etc/passwd:/etc/passwd:ro \
+        -v /etc/group:/etc/group:ro \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v <%= node["dotfiles"]["profile"]["home"] %>:/home \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        "${DOCKER_REPO_PREFIX}/$@"
+}

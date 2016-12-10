@@ -1,9 +1,24 @@
-# dotfiles
+# The Fynx's dotFiles
 
-This is a [Chef](http://www.opscode.com/) cookbook to add my dotfiles to a machine. It also contains a script and some configuration files to allow you to provision the machine you're currently on with the default recipe.
+How I survive the CLI and then some.
 
-To set up your own workstation:
+## Revamped Edition
+Provides custom setup for Windows, Linux, and Mac OS
 
-1. Clone or simply download the repository to your computer.
-1. (Optional) Edit `node.json` to override any of the default attributes. The default attributes assume your user is "Levi".
-1. Run `install.sh`.
+## Install
+
+### OSX/Linux (or Windows Bash/Git Bash)
+`curl https://raw.githubusercontent.com/TheFynx/dotFiles/revamp-2/install.sh | bash`
+
+### Windows
+Imagine a powershell script
+
+## Option/Controls
+Most configurable items are found in [attributes](attributes/default.rb)
+
+## Thanks
+Shamelessly stole from these repos/setups
+
+* Britt Gresham [dotfiles](https://github.com/demophoon/dotfiles)
+* Jess Frazelle [dotfiles](https://github.com/jfrazelle/dotfiles)
+* Simon Smith [dotfiles](https://github.com/simonsmith/dotfiles)

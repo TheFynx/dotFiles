@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: dotfiles
-# Recipe:: default
+# Recipe:: windows
 #
 # Copyright (C) 2016 Levi Smith
 #
@@ -22,11 +22,42 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-case node['platform_family']
-when 'windows'
-  include_recipe 'dotfiles::windows'
-when 'mac_os_x'
-  include_recipe 'dotfiles::mac'
-else
-  include_recipe 'dotfiles::linux'
+# rubocop:disable Style/NumericLiteralPrefix
+
+%w(
+  bash_profile
+  bashrc
+  profile
+  exports
+  aliases
+  dockerfunc
+  functions
+  path
+).each do |filename|
+  template "#{node['dotfiles']['profile']['home']}/.#{filename}" do
+    source "#{filename}.sh.erb"
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
+  end
+end
+
+%w(
+  vimrc
+).each do |filename|
+  template "#{node['dotfiles']['profile']['home']}/_#{filename}" do
+    source "#{filename}.erb"
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
+  end
+end
+
+%w(
+  gitconfig
+  gitignore
+).each do |filename|
+  template "#{node['dotfiles']['profile']['home']}/.#{filename}" do
+    source "#{filename}.erb"
+    owner node['dotfiles']['profile']['user']
+    group node['dotfiles']['profile']['group']
+  end
 end
