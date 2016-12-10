@@ -38,7 +38,6 @@
     source "#{filename}.sh.erb"
     owner node['dotfiles']['profile']['user']
     group node['dotfiles']['profile']['group']
-    mode 00775
   end
 end
 
@@ -49,7 +48,6 @@ end
     source "#{filename}.erb"
     owner node['dotfiles']['profile']['user']
     group node['dotfiles']['profile']['group']
-    mode 00775
   end
 end
 
@@ -61,6 +59,5 @@ end
     source "#{filename}.erb"
     owner node['dotfiles']['profile']['user']
     group node['dotfiles']['profile']['group']
-    mode 00775
   end
 end
