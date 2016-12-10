@@ -62,7 +62,7 @@ directory "#{node['dotfiles']['profile']['home']}/.config/terminator" do
 end
 
 template "#{node['dotfiles']['profile']['home']}/.config/terminator/config" do
-  source 'terminator/config.erb'
+  source 'term_config.erb'
   owner node['dotfiles']['profile']['user']
   group node['dotfiles']['profile']['group']
   mode 00775
