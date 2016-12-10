@@ -29,7 +29,7 @@ function prompt_continue () {
 # create Berksfile so that we can install the correct cookbook dependencies
 cat > "${tempInstallDir}/Berksfile" <<EOF
 source 'https://supermarket.chef.io'
-cookbook "${dotFilesCookbook}", git: '${dotfilesGit}', branch: "revamp-2"
+cookbook "${dotFilesCookbook}", git: '${dotfilesGit}
 EOF
 
 read -p ">>> dotFile Install -- Do you wish to bootstrap the system at this time?; y/n (default n)" bootstrapAnswer

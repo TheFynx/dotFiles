@@ -8,7 +8,7 @@ Provides custom setup for Windows, Linux, and Mac OS
 ## Install
 
 ### OSX/Linux (or Windows Bash/Git Bash)
-`curl https://raw.githubusercontent.com/TheFynx/dotFiles/revamp-2/install.sh | bash`
+`curl https://raw.githubusercontent.com/TheFynx/dotFiles/master/install.sh | bash`
 
 ### Windows
 Imagine a powershell script
