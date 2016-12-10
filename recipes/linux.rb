@@ -55,7 +55,7 @@ end
   end
 end
 
-directory "#{node['dotfiles']['profile']['home']}./config/terminator" do
+directory "#{node['dotfiles']['profile']['home']}/.config/terminator" do
   owner node['dotfiles']['profile']['user']
   group node['dotfiles']['profile']['group']
   mode 00775
