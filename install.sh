@@ -29,7 +29,7 @@ function prompt_continue () {
 # create Berksfile so that we can install the correct cookbook dependencies
 cat > "${tempInstallDir}/Berksfile" <<EOF
 source 'https://supermarket.chef.io'
-cookbook "${dotFilesCookbook}", git: '${dotfilesGit}
+cookbook "${dotFilesCookbook}", git: '${dotfilesGit}'
 EOF
 
 read -p ">>> dotFile Install -- Do you wish to bootstrap the system at this time?; y/n (default n)" bootstrapAnswer
@@ -49,13 +49,17 @@ chef_zero.enabled
 json_attribs "${tempInstallDir}/attributes.json"
 EOF
 
-cat <<EOF
->>> Installing ChefDK
-EOF
+if [ -f '/etc/*-release' ]; then
+    platform=$(cat /etc/*-release | awk 'NR==1{print $1}')
+elif [ -n $(command -v lsb_release) ]; then
+    platform=$(lsb_release -a)
+else
+    platform=
+fi
 
-platform=$(cat /etc/*-release | awk 'NR==1{print $1}')
 if [ -z $(command -v chef) ]; then
     if [ "${platform}" != "Antergos" ]; then
+        echo ">>> Installing ChefDK"
         curl --silent --show-error https://omnitruck.chef.io/install.sh | \
         sudo -E bash -s -- -c stable -P chefdk || prompt_continue
     else
