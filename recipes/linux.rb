@@ -30,7 +30,6 @@
   profile
   exports
   aliases
-  dockerfunc
   functions
   path
 ).each do |filename|
