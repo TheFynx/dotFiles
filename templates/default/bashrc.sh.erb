@@ -26,14 +26,14 @@ export SCM_CHECK=true
 export DOCKER_CONTENT_TRUST=0
 
 # For Travis CLI
-[ -f <%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh ] && source <%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh
+[ -f "<%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh" ] && source <%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh
 
 
 # Prompt Config
 [ -z "$PS1" ] && return
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
+if [ -x "/usr/bin/dircolors" ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
@@ -43,7 +43,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-if [ -n $(command -v vim) ]; then
+if [ -n "$(command -v vim)" ]; then
     alias vcb="vim +BundleClean! +BundleInstall! +qall!"
     alias v="vim"
     alias vi="vim"
@@ -52,7 +52,7 @@ fi
 bind TAB:menu-complete
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
+if [ -f "/etc/bashrc" ]; then
         . /etc/bashrc
 fi
 
@@ -60,26 +60,26 @@ fi
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
-    if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
         . /usr/share/bash-completion/bash_completion
-    elif [[ -f /etc/bash_completion ]]; then
+    elif [[ -f "/etc/bash_completion" ]]; then
         . /etc/bash_completion
     fi
 fi
 
-if [ -n $(command -v brew) ]; then
-    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+if [ -n "$(command -v brew)" ]; then
+    if [ -f "$(brew --prefix)/etc/bash_completion" ]; then
         . $(brew --prefix)/etc/bash_completion
     fi
 fi
 
-if [ -d /etc/bash_completion.d ]; then
-    for file in /etc/bash_completion.d/* ; do
+if [ -d "/etc/bash_completion.d" ]; then
+    for file in "/etc/bash_completion.d/*" ; do
         source "$file"
     done
 fi
 
 # Load Bash It
-if [ -f $BASH_IT/bash_it.sh ]; then
+if [ -f "$BASH_IT/bash_it.sh" ]; then
     source $BASH_IT/bash_it.sh
 fi
