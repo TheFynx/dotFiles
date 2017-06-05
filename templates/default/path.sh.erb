@@ -27,7 +27,7 @@ if [ -d "<%= node["dotfiles"]["profile"]["home"] %>/bin" ]; then
 fi
 
 # Add shim/rbenv to path.
-if [ -n $(command -v rbenv) ]; then
+if [ -n "$(command -v rbenv)" ]; then
     eval "$(rbenv init -)"
 fi
 
