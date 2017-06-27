@@ -9,22 +9,6 @@ esac
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# Path to the bash it configuration
-export BASH_IT="<%= node["dotfiles"]["profile"]["home"] %>/.bash_it"
-
-# Lock and Load a custom theme file
-# location /.bash_it/themes/
-export BASH_IT_THEME='powerline'
-
-# Don't check mail when opening terminal.
-unset MAILCHECK
-
-# Set this to false to turn off version control status checking within the prompt for all themes
-export SCM_CHECK=true
-
-# Set docker to allow untrusted images
-export DOCKER_CONTENT_TRUST=0
-
 # For Travis CLI
 [ -f "<%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh" ] && source <%= node["dotfiles"]["profile"]["home"] %>/.travis/travis.sh
 
@@ -58,5 +42,18 @@ fi
 
 # Load Bash It
 if [ -f "$BASH_IT/bash_it.sh" ]; then
+    # Path to the bash it configuration
+    export BASH_IT="<%= node["dotfiles"]["profile"]["home"] %>/.bash_it"
+
+    # Lock and Load a custom theme file
+    # location /.bash_it/themes/
+    export BASH_IT_THEME='powerline'
+
+    # Don't check mail when opening terminal.
+    unset MAILCHECK
+
+    # Set this to false to turn off version control status checking within the prompt for all themes
+    export SCM_CHECK=true
+
     source $BASH_IT/bash_it.sh
 fi

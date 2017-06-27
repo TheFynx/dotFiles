@@ -132,9 +132,6 @@ done
 # [C] explained: http://www.commandlinefu.com/commands/view/402/exclude-grep-from-your-grepped-output-of-ps-alias-included-in-description
 alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v extension-process | tr -s ' ' | cut -d ' ' -f2 | xargs kill"
 
-# Lock the screen (when going AFK)
-alias afk="i3lock -c 000000"
-
 # vhosts
 alias hosts='sudo vim /etc/hosts'
 
@@ -151,7 +148,7 @@ alias mv='mv -i'
 alias untar='tar xvf'
 
 # Pipe my public key to my clipboard.
-alias pubkey="more ~/.ssh/<%= @hostname %>.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
+alias pubkey="more ~/.ssh/id_rsa.pub | xclip -selection clipboard | echo '=> Public key copied to pasteboard.'"
 
 # Pipe my private key to my clipboard.
-alias prikey="more ~/.ssh/keys/<%= @hostname %> | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"
+alias prikey="more ~/.ssh/keys/id_rsa | xclip -selection clipboard | echo '=> Private key copied to pasteboard.'"

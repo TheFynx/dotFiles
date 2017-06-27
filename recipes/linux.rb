@@ -75,4 +75,3 @@ remote_directory "#{node['dotfiles']['profile']['home']}/.local/share/fonts" do
   mode 00775
   action :create
 end
-
