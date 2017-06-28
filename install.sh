@@ -87,4 +87,3 @@ sudo rm -rf "$tempInstallDir"
 cat <<EOF
 >>> dotFiles Installation Complete!
 EOF
-

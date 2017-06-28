@@ -90,3 +90,25 @@ remote_directory "#{node['dotfiles']['profile']['home']}/Library/Fonts" do
   mode 00775
   action :create
 end
+
+directory "#{node['dotfiles']['profile']['home']}/.config/terminator" do
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
+  mode 00775
+end
+
+template "#{node['dotfiles']['profile']['home']}/.config/terminator/config" do
+  source 'term_config.erb'
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
+  mode 00775
+end
+
+# Fonts
+remote_directory "#{node['dotfiles']['profile']['home']}/.local/share/fonts" do
+  source 'fonts'
+  owner node['dotfiles']['profile']['user']
+  group node['dotfiles']['profile']['group']
+  mode 00775
+  action :create
+end
